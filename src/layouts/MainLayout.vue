@@ -17,7 +17,6 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
 import DropDownButton from 'src/components/DropDownButton.vue'
 import InfoPopup from 'src/components/InfoPopup.vue'
 
@@ -70,7 +69,6 @@ export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink,
     DropDownButton,
     InfoPopup
   },
@@ -79,7 +77,6 @@ export default defineComponent({
     const leftDrawerOpen = ref(false)
 
     return {
-      essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value
