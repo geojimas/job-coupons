@@ -1,10 +1,19 @@
 import MainLayout from '../layouts/MainLayout.vue'
+import LoginPage from '../pages/LoginPage.vue'
+import IndexPage from '../pages/IndexPage.vue'
 const routes = [
   {
     path: '/',
     component: MainLayout,
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }]
+    children: [
+      { path: '', component: IndexPage },
+      { path: '/login', component: LoginPage }
+    ]
   },
+  // {
+  //   path: '/login',
+  //   component: LoginPage
+  // },
 
   // Always leave this as last one,
   // but you can also remove it

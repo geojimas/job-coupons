@@ -6,7 +6,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import StaffTable from 'src/components/staffTable.vue'
+import StaffTable from '../components/StaffTable.vue'
 
 export default defineComponent({
   name: 'IndexPage',

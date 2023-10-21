@@ -16,21 +16,28 @@
 
           <div class="text-subtitle1 q-mt-md q-mb-xs">John Doe</div>
 
-          <q-btn color="primary" label="Logout" push size="sm" v-close-popup />
+          <q-btn
+            color="primary"
+            @click.prevent="handleLogout"
+            label="Logout"
+            push
+            size="sm"
+            v-close-popup />
         </div>
       </div>
     </q-btn-dropdown>
   </div>
 </template>
 
-<script>
-export default {
-  setup() {
-    return {
-      onItemClick() {
-        console.log('Clicked on an Item')
-      }
-    }
+<script setup>
+import { useUserStore } from '../stores/userStore'
+const store = useUserStore()
+
+const handleLogout = () => {
+  try {
+    store.logoutUser()
+  } catch (error) {
+    alert(error)
   }
 }
 </script>

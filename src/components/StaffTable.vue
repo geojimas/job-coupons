@@ -22,138 +22,154 @@
 
 <script>
 import { exportFile, useQuasar } from 'quasar'
+import { ref, onMounted } from 'vue'
+import { supabase } from '../boot/supabase'
 
 const columns = [
   {
     name: 'name',
-    required: true,
-    label: 'Dessert (100g serving)',
-    align: 'left',
+    label: 'Name',
+    align: 'center',
     field: row => row.name,
     format: val => `${val}`,
     sortable: true
   },
-  { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-  { name: 'protein', label: 'Protein (g)', field: 'protein' },
-  { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
   {
-    name: 'calcium',
-    label: 'Calcium (%)',
-    field: 'calcium',
-    sortable: true,
-    sort: (a, b) => parseInt(a, 10) - parseInt(b, 10)
+    name: 'surname',
+    label: 'Surname',
+    align: 'center',
+    field: row => row.surname,
+    format: val => `${val}`,
+    sortable: true
   },
   {
-    name: 'iron',
-    label: 'Iron (%)',
-    field: 'iron',
-    sortable: true,
-    sort: (a, b) => parseInt(a, 10) - parseInt(b, 10)
-  }
-]
+    name: 'email',
+    label: 'E-mail',
+    align: 'center',
+    field: row => row.email,
+    format: val => `${val}`,
+    sortable: true
+  },
 
-const rows = [
   {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: '14%',
-    iron: '1%'
+    name: 'phone',
+    label: 'Phone',
+    align: 'center',
+    field: row => row.phone,
+    format: val => `${val}`,
+    sortable: true
   },
   {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: '8%',
-    iron: '1%'
+    name: 'contract_term',
+    label: 'Contract Termination',
+    align: 'center',
+    field: row => row.contract_term,
+    format: val => `${val}`,
+    sortable: true
   },
   {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: '6%',
-    iron: '7%'
+    name: 'coupon_rights',
+    label: 'Coupon right',
+    align: 'center',
+    field: row => row.coupon_rights,
+    format: val => `${val}`,
+    sortable: true
   },
   {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: '3%',
-    iron: '8%'
+    name: 'january',
+    label: 'January',
+    align: 'center',
+    field: row => row.january,
+    format: val => `${val}`,
+    sortable: true
   },
   {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: '7%',
-    iron: '16%'
+    name: 'february',
+    label: 'February',
+    align: 'center',
+    field: row => row.february,
+    format: val => `${val}`,
+    sortable: true
   },
   {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: '0%',
-    iron: '0%'
+    name: 'april',
+    label: 'April',
+    align: 'center',
+    field: row => row.april,
+    format: val => `${val}`,
+    sortable: true
   },
   {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    sodium: 38,
-    calcium: '0%',
-    iron: '2%'
+    name: 'may',
+    label: 'May',
+    align: 'center',
+    field: row => row.may,
+    format: val => `${val}`,
+    sortable: true
   },
   {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    sodium: 562,
-    calcium: '0%',
-    iron: '45%'
+    name: 'june',
+    label: 'June',
+    align: 'center',
+    field: row => row.june,
+    format: val => `${val}`,
+    sortable: true
   },
   {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    sodium: 326,
-    calcium: '2%',
-    iron: '22%'
+    name: 'july',
+    label: 'July',
+    align: 'center',
+    field: row => row.july,
+    format: val => `${val}`,
+    sortable: true
   },
   {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    sodium: 54,
-    calcium: '12%',
-    iron: '6%'
+    name: 'august',
+    label: 'August',
+    align: 'center',
+    field: row => row.august,
+    format: val => `${val}`,
+    sortable: true
+  },
+  {
+    name: 'september',
+    label: 'September',
+    align: 'center',
+    field: row => row.september,
+    format: val => `${val}`,
+    sortable: true
+  },
+  {
+    name: 'october',
+    label: 'October',
+    align: 'center',
+    field: row => row.october,
+    format: val => `${val}`,
+    sortable: true
+  },
+  {
+    name: 'november',
+    label: 'November',
+    align: 'center',
+    field: row => row.november,
+    format: val => `${val}`,
+    sortable: true
+  },
+  {
+    name: 'december',
+    label: 'December',
+    align: 'center',
+    field: row => row.december,
+    format: val => `${val}`,
+    sortable: true
+  },
+  {
+    name: 'total_coupons',
+    label: 'Total Coupons',
+    align: 'center',
+    field: row => row.total_coupons,
+    format: val => `${val}`,
+    sortable: true
   }
 ]
 
@@ -177,6 +193,23 @@ export default {
   setup() {
     const $q = useQuasar()
 
+    onMounted(() => {
+      handleRequest()
+    })
+
+    const rows = ref([])
+    const handleRequest = async () => {
+      try {
+        let { data, error } = await supabase.from('staff').select('*')
+        rows.value = data
+        if (error) throw error
+      } catch (error) {
+        if (error instanceof Error) {
+          alert(error.message)
+        }
+      }
+    }
+
     return {
       columns,
       rows,
@@ -185,7 +218,7 @@ export default {
         // naive encoding to csv format
         const content = [columns.map(col => wrapCsvValue(col.label))]
           .concat(
-            rows.map(row =>
+            rows.value.map(row =>
               columns
                 .map(col =>
                   wrapCsvValue(
