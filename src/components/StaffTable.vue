@@ -14,6 +14,7 @@
         <q-input
           class="q-mr-md"
           dense
+          color="secondary"
           debounce="300"
           v-model="filter"
           :placeholder="`${$t('Search')}`">

@@ -21,8 +21,8 @@ const i18n = useI18n()
 const selectedLang = ref(i18n.locale)
 
 const languages = [
-  { label: 'ΕΛ', value: 'ΕΛ' },
-  { label: 'EN', value: 'EN' }
+  { label: 'ΕΛ', value: 'el' },
+  { label: 'EN', value: 'en' }
 ]
 </script>
 
