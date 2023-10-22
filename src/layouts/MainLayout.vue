@@ -2,7 +2,8 @@
   <q-layout>
     <q-header reveal elevated class="bg-dark text-white">
       <q-toolbar>
-        <q-toolbar-title> Coupons </q-toolbar-title>
+        <q-toolbar-title></q-toolbar-title>
+        <ToggleLanguage />
         <InfoPopup />
         <DropDownButton />
       </q-toolbar>
@@ -14,8 +15,9 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import DropDownButton from 'src/components/DropDownButton.vue'
+import ToggleLanguage from 'src/components/ToggleLanguage.vue'
 import InfoPopup from 'src/components/InfoPopup.vue'
 
 export default defineComponent({
@@ -23,18 +25,8 @@ export default defineComponent({
 
   components: {
     DropDownButton,
+    ToggleLanguage,
     InfoPopup
-  },
-
-  setup() {
-    const leftDrawerOpen = ref(false)
-
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
   }
 })
 </script>

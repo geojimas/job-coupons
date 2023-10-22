@@ -5,6 +5,7 @@ export const useUserStore = defineStore('userStore', {
   state: () => {
     return {
       user: {},
+      isAuthenticated: false,
       loading: false
     }
   },
@@ -21,6 +22,7 @@ export const useUserStore = defineStore('userStore', {
         })
         if (error) throw error
         this.user = data.user
+        this.isAuthenticated = true
         this.router.push("/")
       } catch (error) {
         if (error instanceof Error) {
@@ -36,6 +38,7 @@ export const useUserStore = defineStore('userStore', {
         const { error } = await supabase.auth.signOut()
         if (error) throw error
         this.user = {}
+        this.isAuthenticated = false
         this.router.push("/login")
       } catch (error) {
         if (error instanceof Error) {

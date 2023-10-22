@@ -1,11 +1,12 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-xl">
     <q-table
       flat
       bordered
       title="Treats"
       :rows="rows"
       :columns="columns"
+      :loading="loadingState"
       color="primary"
       row-key="name">
       <template v-slot:top-right>
@@ -20,10 +21,78 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { exportFile, useQuasar } from 'quasar'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../boot/supabase'
+
+const $q = useQuasar()
+const loadingState = ref(true)
+const rows = ref([])
+
+onMounted(() => {
+  handleRequest()
+})
+
+const handleRequest = async () => {
+  try {
+    let { data, error } = await supabase.from('staff').select('*')
+    rows.value = data
+    loadingState.value = false
+    if (error) throw error
+  } catch (error) {
+    if (error instanceof Error) {
+      alert(error.message)
+    }
+  }
+}
+
+function wrapCsvValue(val, formatFn, row) {
+  let formatted = formatFn !== void 0 ? formatFn(val, row) : val
+
+  formatted = formatted === void 0 || formatted === null ? '' : String(formatted)
+
+  formatted = formatted.split('"').join('""')
+  /**
+   * Excel accepts \n and \r in strings, but some other CSV parsers do not
+   * Uncomment the next two lines to escape new lines
+   */
+  // .split('\n').join('\\n')
+  // .split('\r').join('\\r')
+
+  return `"${formatted}"`
+}
+
+function exportTable() {
+  // naive encoding to csv format
+  const content = [columns.map(col => wrapCsvValue(col.label))]
+    .concat(
+      rows.value.map(row =>
+        columns
+          .map(col =>
+            wrapCsvValue(
+              typeof col.field === 'function'
+                ? col.field(row)
+                : row[col.field === void 0 ? col.name : col.field],
+              col.format,
+              row
+            )
+          )
+          .join(',')
+      )
+    )
+    .join('\r\n')
+
+  const status = exportFile('staff-coupons-2023.csv', content, 'text/csv')
+
+  if (status !== true) {
+    $q.notify({
+      message: 'Browser denied file download...',
+      color: 'negative',
+      icon: 'warning'
+    })
+  }
+}
 
 const columns = [
   {
@@ -88,6 +157,14 @@ const columns = [
     label: 'February',
     align: 'center',
     field: row => row.february,
+    format: val => `${val}`,
+    sortable: true
+  },
+  {
+    name: 'march',
+    label: 'March',
+    align: 'center',
+    field: row => row.march,
     format: val => `${val}`,
     sortable: true
   },
@@ -172,79 +249,4 @@ const columns = [
     sortable: true
   }
 ]
-
-function wrapCsvValue(val, formatFn, row) {
-  let formatted = formatFn !== void 0 ? formatFn(val, row) : val
-
-  formatted = formatted === void 0 || formatted === null ? '' : String(formatted)
-
-  formatted = formatted.split('"').join('""')
-  /**
-   * Excel accepts \n and \r in strings, but some other CSV parsers do not
-   * Uncomment the next two lines to escape new lines
-   */
-  // .split('\n').join('\\n')
-  // .split('\r').join('\\r')
-
-  return `"${formatted}"`
-}
-
-export default {
-  setup() {
-    const $q = useQuasar()
-
-    onMounted(() => {
-      handleRequest()
-    })
-
-    const rows = ref([])
-    const handleRequest = async () => {
-      try {
-        let { data, error } = await supabase.from('staff').select('*')
-        rows.value = data
-        if (error) throw error
-      } catch (error) {
-        if (error instanceof Error) {
-          alert(error.message)
-        }
-      }
-    }
-
-    return {
-      columns,
-      rows,
-
-      exportTable() {
-        // naive encoding to csv format
-        const content = [columns.map(col => wrapCsvValue(col.label))]
-          .concat(
-            rows.value.map(row =>
-              columns
-                .map(col =>
-                  wrapCsvValue(
-                    typeof col.field === 'function'
-                      ? col.field(row)
-                      : row[col.field === void 0 ? col.name : col.field],
-                    col.format,
-                    row
-                  )
-                )
-                .join(',')
-            )
-          )
-          .join('\r\n')
-
-        const status = exportFile('table-export.csv', content, 'text/csv')
-
-        if (status !== true) {
-          $q.notify({
-            message: 'Browser denied file download...',
-            color: 'negative',
-            icon: 'warning'
-          })
-        }
-      }
-    }
-  }
-}
 </script>

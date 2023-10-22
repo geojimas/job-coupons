@@ -1,5 +1,7 @@
+import elGR from './el-GR'
 import enUS from './en-US'
 
 export default {
-  'en-US': enUS
+  'EN': enUS,
+  'ΕΛ': elGR
 }

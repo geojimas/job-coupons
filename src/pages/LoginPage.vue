@@ -38,7 +38,6 @@ const store = useUserStore()
 const email = ref(import.meta.env.VITE_ADMIN_EMAIL)
 const password = ref(import.meta.env.VITE_ADMIN_PASSWORD)
 
-
 const handleLogin = () => {
   try {
     store.loginUser(email.value, password.value)
@@ -46,7 +45,6 @@ const handleLogin = () => {
     alert(error)
   }
 }
-
 </script>
 
 <style scoped lang="scss">

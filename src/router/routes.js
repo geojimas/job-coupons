@@ -6,17 +6,14 @@ const routes = [
     path: '/',
     component: MainLayout,
     children: [
-      { path: '', component: IndexPage },
-      { path: '/login', component: LoginPage }
-    ]
+      {
+        path: '',
+        component: IndexPage,
+        meta: { requireAuth: true }
+      },
+      { path: 'login', component: LoginPage }
+    ],
   },
-  // {
-  //   path: '/login',
-  //   component: LoginPage
-  // },
-
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue')

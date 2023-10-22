@@ -1,0 +1,33 @@
+<template>
+  <div>
+    <q-btn-toggle
+      v-model="selectedLang"
+      active-class="active-toggle-btn"
+      no-caps
+      rounded
+      unelevated
+      toggle-color="secondary"
+      color="dark"
+      text-color="white"
+      :options="languages" />
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const i18n = useI18n()
+const selectedLang = ref(i18n.locale)
+
+const languages = [
+  { label: 'ΕΛ', value: 'ΕΛ' },
+  { label: 'EN', value: 'EN' }
+]
+</script>
+
+<style scoped lang="scss">
+.active-toggle-btn {
+  text-decoration: underline;
+}
+</style>
