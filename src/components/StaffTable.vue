@@ -8,6 +8,7 @@
       :loading="loadingState"
       :filter="filter"
       color="secondary"
+      class="animate__animated animate__fadeIn"
       row-key="id">
       <template v-slot:top-right="props">
         <StaffDialog @dataFromServer="getDataFromServer" />

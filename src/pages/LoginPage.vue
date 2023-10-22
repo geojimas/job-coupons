@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center bg-grey-4">
-    <q-card class="q-pa-md shadow-2 my_card" bordered>
+    <q-card class="q-pa-md shadow-2 my_card animate__animated animate__bounceIn" bordered>
       <q-card-section class="text-center">
         <div class="text-grey-9 text-h4 text-weight-bold">{{ $t('login')  }}</div>
       </q-card-section>

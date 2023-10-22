@@ -1,5 +1,5 @@
 <template>
-  <VueApexCharts width="500" type="radialBar" :options="options" :series="series"></VueApexCharts>
+  <VueApexCharts       class="animate__animated animate__fadeIn" width="500" type="radialBar" :options="options" :series="series"></VueApexCharts>
 </template>
 
 <script setup>
