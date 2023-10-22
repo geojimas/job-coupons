@@ -10,7 +10,7 @@
       color="secondary"
       row-key="id">
       <template v-slot:top-right="props">
-        <StaffDialog />
+        <StaffDialog @dataFromServer="getDataFromServer" />
         <q-input
           class="q-mr-md"
           dense
@@ -21,7 +21,7 @@
             <q-icon name="search" />
           </template>
         </q-input>
-        <q-select
+        <!-- <q-select
           v-model="visibleColumns"
           class="q-mr-md"
           multiple
@@ -34,7 +34,7 @@
           :options="columns"
           option-value="name"
           options-cover
-          style="min-width: 150px" />
+          style="min-width: 150px" /> -->
         <q-btn
           color="secondary"
           icon-right="archive"
@@ -62,6 +62,7 @@ import { exportFile, useQuasar } from 'quasar'
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../boot/supabase'
 import StaffDialog from '../components/StaffDialog.vue'
+import dayjs from 'dayjs'
 
 const $q = useQuasar()
 const loadingState = ref(true)
@@ -69,10 +70,10 @@ const rows = ref([])
 const filter = ref('')
 
 onMounted(() => {
-  handleRequest()
+  getDataFromServer()
 })
 
-const handleRequest = async () => {
+const getDataFromServer = async () => {
   try {
     let { data, error } = await supabase.from('staff').select('*')
     rows.value = data
@@ -103,10 +104,10 @@ function wrapCsvValue(val, formatFn, row) {
 
 function exportTable() {
   // naive encoding to csv format
-  const content = [columns.map(col => wrapCsvValue(col.label))]
+  const content = [columns.value.map(col => wrapCsvValue(col.label))]
     .concat(
       rows.value.map(row =>
-        columns
+        columns.value
           .map(col =>
             wrapCsvValue(
               typeof col.field === 'function'
@@ -132,31 +133,31 @@ function exportTable() {
   }
 }
 
-const visibleColumns = ref([
-  'name',
-  'surname',
-  'email',
-  'phone',
-  'contract_term',
-  'coupon_rights',
-  'january',
-  'february',
-  'march',
-  'april',
-  'may',
-  'june',
-  'july',
-  'august',
-  'september',
-  'october',
-  'november',
-  'august',
-  'december',
-  'total_coupons',
-  'actions'
-])
+// const visibleColumns = ref([
+//   'name',
+//   'surname',
+//   'email',
+//   'phone',
+//   'contract_term',
+//   'coupon_rights',
+//   'january',
+//   'february',
+//   'march',
+//   'april',
+//   'may',
+//   'june',
+//   'july',
+//   'august',
+//   'september',
+//   'october',
+//   'november',
+//   'august',
+//   'december',
+//   'total_coupons',
+//   'actions'
+// ])
 
-const columns = [
+const columns = ref([
   {
     name: 'name',
     label: 'Name',
@@ -194,7 +195,7 @@ const columns = [
     name: 'contract_term',
     label: 'Contract Termination',
     align: 'center',
-    field: row => row.contract_term,
+    field: row => dayjs(row.contract_term).format('DD/MM/YYYY'),
     format: val => `${val}`,
     sortable: true
   },
@@ -317,5 +318,5 @@ const columns = [
     field: 'actions',
     sortable: true
   }
-]
+])
 </script>

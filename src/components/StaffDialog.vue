@@ -20,26 +20,32 @@
           </q-toolbar>
         </q-header> -->
         <!-- <q-btn color="negative" icon="close" @click="toggleModal = false" /> -->
-        <div>
+        <q-form autofocus @submit="HandleSubmitRequest">
           <div class="row">
             <div class="col q-ma-sm">
               <q-input
                 outlined
                 color="secondary"
-                :rules="[val => val.length >= 3 || 'Name is Required']"
-                ref="nameInput"
+                lazy-rules
+                :rules="[
+                  val => (val && val.length > 0) || `${$t('nameValidation1')}`,
+                  val => (val && val.length >= 3) || `${$t('nameValidation2')}`
+                ]"
                 type="text"
-                v-model="username"
+                v-model="formData.username"
                 :label="`${$t('username')}`" />
             </div>
             <div class="col q-ma-sm">
               <q-input
                 outlined
                 color="secondary"
-                :rules="[val => val.length >= 3 || 'Surname is Required']"
-                ref="nameInput"
+                lazy-rules
+                :rules="[
+                  val => (val && val.length > 0) || `${$t('surnameValidation1')}`,
+                  val => (val && val.length >= 3) || `${$t('surnameValidation2')}`
+                ]"
                 type="text"
-                v-model="surname"
+                v-model="formData.surname"
                 :label="`${$t('surname')}`" />
             </div>
           </div>
@@ -49,8 +55,9 @@
                 outlined
                 color="secondary"
                 type="email"
-                :rules="[(val, rules) => rules.email(val) || 'Please enter a valid email address']"
-                v-model="email"
+                lazy-rules
+                :rules="[(val, rules) => rules.email(val) || `${$t('validEmail')}`]"
+                v-model="formData.email"
                 :label="`${$t('email')}`" />
             </div>
             <div class="col q-ma-sm">
@@ -58,18 +65,32 @@
                 outlined
                 color="secondary"
                 type="tel"
-                :rules="[val => val.length <= 10 || 'Please use maximum 10 characters']"
-                v-model="phone"
+                lazy-rules
+                :rules="[
+                  val => val.length <= 10 || $t('validPhone1'),
+                  val => !val || /^\d+$/.test(val) || $t('validPhone2')
+                ]"
+                v-model="formData.phone"
                 :label="`${$t('phone')}`" />
             </div>
           </div>
           <div class="row">
             <div class="col q-ma-sm">
-              <q-input :label="`${$t('contractExp')}`" outlined v-model="contactTerm" mask="date">
+              <q-input
+                :label="`${$t('contractExp')}`"
+                outlined
+                color="secondary"
+                v-model="formData.contactTerm">
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date color="secondary" v-model="contactTerm">
+                      <q-date
+                        minimal
+                        mask="DD-MM-YYYY"
+                        lazy-rules
+                        :options="date => date >= new Date().toISOString().slice(0, 10)"
+                        color="secondary"
+                        v-model="formData.contactTerm">
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup label="Close" color="secondary" flat />
                         </div>
@@ -102,26 +123,32 @@
                 :label="$t(months[index])" />
             </div>
           </div>
-        </div>
-        <div style="display: flex; justify-content: end" class="q-pa-sm">
-          <q-btn class="q-mr-sm" flat :label="`${$t('cancel')}`" v-close-popup />
-          <q-btn color="secondary" :label="`${$t('save')}`" @click.prevent="submitForm" push />
-        </div>
+          <div style="display: flex; justify-content: end" class="q-pa-sm">
+            <q-btn class="q-mr-sm" flat :label="`${$t('cancel')}`" v-close-popup />
+            <q-btn type="submit" color="secondary" push :label="`${$t('save')}`" />
+          </div>
+        </q-form>
       </q-card-section>
     </q-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { supabase } from '../boot/supabase'
+
+const emits = defineEmits(['dataFromServer'])
 
 const toggleModal = ref(false)
-const username = ref('')
-const surname = ref('')
-const email = ref('')
-const phone = ref(null)
 const couponsRight = ref(false)
-const contactTerm = ref('')
+const sentData = ref({})
+const formData = ref({
+  username: '',
+  surname: '',
+  email: '',
+  phone: '',
+  contactTerm: ''
+})
 const numOfCoupons = ref([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 const months = ref([
   'january',
@@ -138,16 +165,23 @@ const months = ref([
   'december'
 ])
 
-const sentData = ref({})
+watch(toggleModal, newToggleModal => {
+  if (!newToggleModal) {
+    formData.value.username = ''
+    formData.value.surname = ''
+    formData.value.email = ''
+    formData.value.phone = ''
+    formData.value.contactTerm = ''
+  }
+})
 
-function submitForm() {
-  // Update sentData with the current values
+const HandleSubmitRequest = async () => {
   sentData.value = {
-    name: username.value,
-    surname: surname.value,
-    email: email.value,
-    phone: phone.value,
-    contract_term: contactTerm.value,
+    name: formData.value.username,
+    surname: formData.value.surname,
+    email: formData.value.email,
+    phone: formData.value.phone,
+    contract_term: formData.value.contactTerm,
     coupon_rights: couponsRight.value,
     january: numOfCoupons.value[0],
     february: numOfCoupons.value[1],
@@ -162,6 +196,17 @@ function submitForm() {
     november: numOfCoupons.value[10],
     december: numOfCoupons.value[11]
   }
-  console.log('DATA TO SERVER', sentData.value)
+
+  try {
+    const { error } = await supabase.from('staff').insert(sentData.value)
+    if (error) throw error
+  } catch (error) {
+    if (error instanceof Error) {
+      alert(error.message)
+    }
+  } finally {
+    emits('dataFromServer')
+    toggleModal.value = false
+  }
 }
 </script>

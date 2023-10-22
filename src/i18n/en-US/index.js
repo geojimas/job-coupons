@@ -28,5 +28,12 @@ export default {
   november: 'November',
   december: 'December',
   save: 'Save',
-  cancel: 'Cancel'
+  cancel: 'Cancel',
+  nameValidation1: 'Name is Required',
+  nameValidation2: 'Name must be at least 3 chars long',
+  surnameValidation1: 'surname is Required',
+  surnameValidation2: 'surname must be at least 3 chars long',
+  validEmail: 'Enter a valid email address',
+  validPhone1: 'Use maximum 10 characters',
+  validPhone2: 'Use only Numbers',
 }
