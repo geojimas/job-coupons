@@ -1,21 +1,57 @@
 <template>
   <div class="q-pa-xl">
     <q-table
-      flat
-      bordered
-      title="Treats"
+      dense
+      :title="`${$t('staffTable')}`"
       :rows="rows"
       :columns="columns"
       :loading="loadingState"
-      color="primary"
-      row-key="name">
-      <template v-slot:top-right>
+      :filter="filter"
+      color="secondary"
+      row-key="id">
+      <template v-slot:top-right="props">
+        <StaffDialog />
+        <q-input
+          class="q-mr-md"
+          dense
+          debounce="300"
+          v-model="filter"
+          :placeholder="`${$t('Search')}`">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+        <q-select
+          v-model="visibleColumns"
+          class="q-mr-md"
+          multiple
+          outlined
+          dense
+          options-dense
+          :display-value="$t('Columns')"
+          emit-value
+          map-options
+          :options="columns"
+          option-value="name"
+          options-cover
+          style="min-width: 150px" />
         <q-btn
-          color="primary"
+          color="secondary"
           icon-right="archive"
-          label="Export to csv"
+          :label="`${$t('exportToCSV')}`"
           no-caps
           @click="exportTable" />
+        <q-btn
+          round
+          :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+          @click="props.toggleFullscreen"
+          class="q-ml-sm" />
+      </template>
+      <template v-slot:body-cell-actions="props">
+        <q-td :props="props">
+          <q-btn color="secondary" class="q-mr-sm" flat debounce="300" icon="mode_edit"></q-btn>
+          <q-btn color="negative" debounce="300" flat icon="delete"></q-btn>
+        </q-td>
       </template>
     </q-table>
   </div>
@@ -25,10 +61,12 @@
 import { exportFile, useQuasar } from 'quasar'
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../boot/supabase'
+import StaffDialog from '../components/StaffDialog.vue'
 
 const $q = useQuasar()
 const loadingState = ref(true)
 const rows = ref([])
+const filter = ref('')
 
 onMounted(() => {
   handleRequest()
@@ -94,6 +132,30 @@ function exportTable() {
   }
 }
 
+const visibleColumns = ref([
+  'name',
+  'surname',
+  'email',
+  'phone',
+  'contract_term',
+  'coupon_rights',
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'august',
+  'december',
+  'total_coupons',
+  'actions'
+])
+
 const columns = [
   {
     name: 'name',
@@ -140,7 +202,7 @@ const columns = [
     name: 'coupon_rights',
     label: 'Coupon right',
     align: 'center',
-    field: row => row.coupon_rights,
+    field: row => (row.coupon_rights === false ? 'No' : 'Yes'),
     format: val => `${val}`,
     sortable: true
   },
@@ -246,6 +308,13 @@ const columns = [
     align: 'center',
     field: row => row.total_coupons,
     format: val => `${val}`,
+    sortable: true
+  },
+  {
+    name: 'actions',
+    align: 'center',
+    label: 'Actions',
+    field: 'actions',
     sortable: true
   }
 ]

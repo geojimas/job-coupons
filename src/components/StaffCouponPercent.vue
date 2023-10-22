@@ -1,5 +1,5 @@
 <template>
-  <VueApexCharts width="400" type="radialBar" :options="options" :series="series"></VueApexCharts>
+  <VueApexCharts width="500" type="radialBar" :options="options" :series="series"></VueApexCharts>
 </template>
 
 <script setup>
@@ -54,7 +54,7 @@ const options = ref({
     }
   },
   title: {
-    text: `Staff with Coupons: ${percentagePeopleWithCouponRights.value}%`,
+    text: `Προσωπικό με κουπόνια`,
     align: 'center'
   },
   colors: [getCssVar('secondary')],
@@ -97,7 +97,7 @@ const options = ref({
       stops: [0, 50, 53, 91]
     }
   },
-  labels: ['Average Results']
+  labels: ['Μέσος όρος']
 })
 
 const series = ref([percentagePeopleWithCouponRights.value])

@@ -5,7 +5,7 @@
         <q-toolbar-title></q-toolbar-title>
         <ToggleLanguage />
         <InfoPopup />
-        <DropDownButton />
+        <DropDownButton v-if="isUserAuth" />
       </q-toolbar>
     </q-header>
     <q-page-container>
@@ -14,19 +14,16 @@
   </q-layout>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
+import { computed } from 'vue'
 import DropDownButton from 'src/components/DropDownButton.vue'
 import ToggleLanguage from 'src/components/ToggleLanguage.vue'
 import InfoPopup from 'src/components/InfoPopup.vue'
+import { useUserStore } from 'src/stores/userStore'
 
-export default defineComponent({
-  name: 'MainLayout',
+const store = useUserStore()
 
-  components: {
-    DropDownButton,
-    ToggleLanguage,
-    InfoPopup
-  }
+const isUserAuth = computed(() => {
+  return store.isAuthenticated
 })
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <VueApexCharts width="400" type="donut" :options="options" :series="series"></VueApexCharts>
+  <VueApexCharts width="470" type="donut" :options="options" :series="series"></VueApexCharts>
 </template>
 
 <script setup>
@@ -45,7 +45,7 @@ watch(stuffData, newStuffData => {
 
 const options = ref({
   title: {
-    text: 'Staff Coupons',
+    text: 'Κουπόνια προσωπικού',
     align: 'left'
   },
   chart: {
@@ -58,7 +58,7 @@ const options = ref({
       sizeOffset: 6
     }
   },
-  labels: ['Coupons', 'No Coupons'],
+  labels: ['Με κουπόνια', 'Χωρίς Κουπόνια'],
   plotOptions: {
     pie: {
       donut: {
@@ -67,7 +67,7 @@ const options = ref({
           total: {
             show: true,
             showAlways: true,
-            label: 'Total',
+            label: 'Σύνολο',
             fontSize: '20px',
             fontWeight: 600,
             color: '#373d3f',
