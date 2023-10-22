@@ -1,18 +1,15 @@
-import MainLayout from '../layouts/MainLayout.vue'
-import LoginPage from '../pages/LoginPage.vue'
-import IndexPage from '../pages/IndexPage.vue'
 const routes = [
   {
     path: '/',
-    component: MainLayout,
+    component: () => import('../layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: IndexPage,
+        component: () => import('../pages/IndexPage.vue'),
         meta: { requireAuth: true }
       },
-      { path: 'login', component: LoginPage }
-    ],
+      { path: 'login', component: () => import('../pages/LoginPage.vue') }
+    ]
   },
   {
     path: '/:catchAll(.*)*',
