@@ -36,4 +36,5 @@ export default {
   validEmail: 'Enter a valid email address',
   validPhone1: 'Use maximum 10 characters',
   validPhone2: 'Use only Numbers',
+  postDataMsg: 'successfully Created'
 }

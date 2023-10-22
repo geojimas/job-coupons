@@ -58,13 +58,12 @@
 </template>
 
 <script setup>
-import { exportFile, useQuasar } from 'quasar'
+import { exportFile } from 'quasar'
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../boot/supabase'
 import StaffDialog from '../components/StaffDialog.vue'
 import dayjs from 'dayjs'
 
-const $q = useQuasar()
 const loadingState = ref(true)
 const rows = ref([])
 const filter = ref('')

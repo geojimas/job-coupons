@@ -36,4 +36,5 @@ export default {
   validEmail: 'Βάλτε ένα έγκυρο Email',
   validPhone1: 'Χρησιμοποίησε μέχρι 10 χαρακτήρες',
   validPhone2: 'Χρησιμοποίησε Μόνο Αριθμούς',
+  postDataMsg: 'Kαταχωρήθηκε με επιτύχια'
 }

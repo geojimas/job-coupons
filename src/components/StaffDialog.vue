@@ -86,9 +86,6 @@
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                       <q-date
                         minimal
-                        mask="DD-MM-YYYY"
-                        lazy-rules
-                        :options="date => date >= new Date().toISOString().slice(0, 10)"
                         color="secondary"
                         v-model="formData.contactTerm">
                         <div class="row items-center justify-end">
@@ -134,10 +131,15 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { useQuasar } from 'quasar'
+import { ref, watch, onMounted } from 'vue'
 import { supabase } from '../boot/supabase'
+import { useI18n } from 'vue-i18n'
 
 const emits = defineEmits(['dataFromServer'])
+
+const $q = useQuasar()
+const i18n = useI18n()
 
 const toggleModal = ref(false)
 const couponsRight = ref(false)
@@ -147,7 +149,7 @@ const formData = ref({
   surname: '',
   email: '',
   phone: '',
-  contactTerm: ''
+  contactTerm: null
 })
 const numOfCoupons = ref([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 const months = ref([
@@ -171,7 +173,7 @@ watch(toggleModal, newToggleModal => {
     formData.value.surname = ''
     formData.value.email = ''
     formData.value.phone = ''
-    formData.value.contactTerm = ''
+    formData.value.contactTerm = null
   }
 })
 
@@ -207,6 +209,14 @@ const HandleSubmitRequest = async () => {
   } finally {
     emits('dataFromServer')
     toggleModal.value = false
+    $q.notify({
+      position: 'top',
+      message: `${i18n.t('postDataMsg')}`,
+      color: 'primary',
+      type: 'positive',
+      progress: true,
+      timeout: 1500
+    })
   }
 }
 </script>
