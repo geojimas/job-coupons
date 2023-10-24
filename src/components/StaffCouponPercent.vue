@@ -1,54 +1,34 @@
 <template>
-  <VueApexCharts
-    class="animate__animated animate__fadeIn"
-    width="400"
-    type="radialBar"
-    :options="options"
-    :series="series"></VueApexCharts>
+  <q-card class="relative-position card-example" bordered>
+    <q-card-section>
+      <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
+        <VueApexCharts
+          class="animate__animated animate__fadeIn"
+          width="400"
+          type="radialBar"
+          :options="options"
+          :series="series"></VueApexCharts>
+      </transition>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, computed } from 'vue'
+import { computed } from 'vue'
 import { getCssVar } from 'quasar'
 import VueApexCharts from 'vue3-apexcharts'
-import { supabase } from '../boot/supabase'
 import { useI18n } from 'vue-i18n'
 
-const loadingState = ref(true)
 const i18n = useI18n()
-const stuffData = ref([])
-const percentagePeopleWithCouponRights = ref(0)
 
-onMounted(() => {
-  handleRequest()
-})
-
-const handleRequest = async () => {
-  try {
-    let { data, error } = await supabase.from('staff').select('*')
-    stuffData.value = data
-    loadingState.value = false
-    if (error) throw error
-  } catch (error) {
-    if (error instanceof Error) {
-      alert(error.message)
-    }
-  }
-}
-
-watch(stuffData, newStuffData => {
-  if (newStuffData.length > 0) {
-    const numberOfPeopleWithCouponRights = newStuffData.filter(
-      person => person.coupon_rights
-    ).length
-
-    percentagePeopleWithCouponRights.value = (
-      (numberOfPeopleWithCouponRights / newStuffData.length) *
-      100
-    ).toFixed(2)
-
-    // Update the data in the series
-    series.value = [percentagePeopleWithCouponRights.value]
+const props = defineProps({
+  percentagePeopleWithCouponRights: {
+    type: String,
+    required: true
+  },
+  loadingState: {
+    type: Boolean,
+    required: true
   }
 })
 
@@ -109,5 +89,7 @@ const options = computed(() => {
   }
 })
 
-const series = ref([percentagePeopleWithCouponRights.value])
+const series = computed(() => {
+  return [props.percentagePeopleWithCouponRights]
+})
 </script>

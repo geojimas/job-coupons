@@ -1,19 +1,27 @@
 <template>
   <div class="q-pa-sm q-gutter-sm">
     <q-btn
-      :label="`${$t('Add')}`"
-      @click="toggleModal = true"
+      :label="`${$t('add')}`"
+      @click="openModal()"
       class="q-mr-lg"
       color="secondary"
       icon="person_add"
       push />
     <q-dialog persistent v-model="toggleModal">
       <q-card-section style="max-height: 65vh" class="bg-white">
-        <q-form autofocus @submit="HandleSubmitRequest">
+        <q-chip
+          class="q-mb-sm"
+          color="dark"
+          :label="$t(`${toggleModalMode}`)"
+          text-color="white"
+          :icon="chipIcon">
+        </q-chip>
+        <q-form autofocus @submit="HandleSubmissions">
           <div class="row">
             <div class="col q-ma-sm">
               <q-input
                 outlined
+                name="name"
                 color="secondary"
                 lazy-rules
                 :rules="[
@@ -21,12 +29,13 @@
                   val => (val && val.length >= 3) || `${$t('nameValidation2')}`
                 ]"
                 type="text"
-                v-model="formData.username"
+                v-model="formData.name"
                 :label="`${$t('username')}`" />
             </div>
             <div class="col q-ma-sm">
               <q-input
                 outlined
+                name="surname"
                 color="secondary"
                 lazy-rules
                 :rules="[
@@ -42,6 +51,7 @@
             <div class="col q-ma-sm">
               <q-input
                 outlined
+                name="email"
                 color="secondary"
                 type="email"
                 lazy-rules
@@ -52,6 +62,7 @@
             <div class="col q-ma-sm">
               <q-input
                 outlined
+                name="phone"
                 color="secondary"
                 type="tel"
                 lazy-rules
@@ -68,12 +79,13 @@
               <q-input
                 :label="`${$t('contractExp')}`"
                 outlined
+                name="contactTerm"
                 color="secondary"
-                v-model="formData.contactTerm">
+                v-model="formData.contract_term">
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date minimal color="secondary" mask="DD/MM/YYYY" v-model="formData.contactTerm">
+                      <q-date minimal color="secondary" v-model="formData.contract_term">
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup label="Close" color="secondary" flat />
                         </div>
@@ -87,7 +99,8 @@
               <q-toggle
                 class="q-ml-md"
                 keep-color
-                v-model="couponsRight"
+                name="couponsRight"
+                v-model="formData.coupon_rights"
                 left-label
                 :label="`${$t('couponsRights')}`"
                 checked-icon="check"
@@ -99,7 +112,8 @@
             <div class="q-ma-sm" v-for="(value, index) in numOfCoupons" :key="index">
               <q-input
                 outlined
-                style="width: 115px"
+                :name="`'${value}'`"
+                style="width: 105px"
                 color="secondary"
                 type="tel"
                 v-model="numOfCoupons[index]"
@@ -118,72 +132,108 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { supabase } from '../boot/supabase'
 import { useI18n } from 'vue-i18n'
 import dayjs from 'dayjs'
+import Constants from 'src/constants/index'
 
 const emits = defineEmits(['dataFromServer'])
 
 const $q = useQuasar()
 const i18n = useI18n()
 
+const currentItemRowData = ref({})
+const toggleModalMode = ref('')
 const toggleModal = ref(false)
-const couponsRight = ref(false)
 const sentData = ref({})
 const formData = ref({
-  username: '',
+  name: '',
   surname: '',
   email: '',
   phone: '',
-  contactTerm: null
+  coupon_rights: false,
+  contract_term: null
 })
 const numOfCoupons = ref([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 const months = ref([
-  'january',
-  'february',
-  'march',
-  'april',
-  'may',
-  'june',
-  'july',
-  'august',
-  'september',
-  'october',
-  'november',
-  'december'
+  Constants.january,
+  Constants.february,
+  Constants.march,
+  Constants.april,
+  Constants.may,
+  Constants.june,
+  Constants.july,
+  Constants.august,
+  Constants.september,
+  Constants.october,
+  Constants.november,
+  Constants.december
 ])
+
+const openModal = payload => {
+  if (payload) {
+    currentItemRowData.value = payload
+    toggleModalMode.value = Constants.editMode
+    console.log('EDIT MODE')
+    // Update the fields in FORM
+    for (const key in formData.value) {
+      if (currentItemRowData.value[key] !== undefined) {
+        formData.value[key] = currentItemRowData.value[key]
+      }
+    }
+    // Update form with the values in numOfCoupons  in FORM
+    for (let index = 0; index < numOfCoupons.value.length; index++) {
+      const monthKey = Constants[months.value[index].toLowerCase()]
+      if (currentItemRowData.value[monthKey] !== undefined) {
+        numOfCoupons.value[index] = currentItemRowData.value[monthKey]
+      }
+    }
+  } else {
+    toggleModalMode.value = Constants.addMode
+    console.log('ADD MODE')
+  }
+  toggleModal.value = true
+}
+
+const chipIcon = computed(() => {
+  return toggleModalMode.value === 'add' ? 'person_add' : 'drive_file_rename_outline'
+})
+
+// Expose value to Parent to Open modal
+defineExpose({
+  openModal
+})
 
 watch(toggleModal, newToggleModal => {
   if (!newToggleModal) {
-    formData.value.username = ''
+    formData.value.name = ''
     formData.value.surname = ''
     formData.value.email = ''
     formData.value.phone = ''
-    formData.value.contactTerm = null
+    formData.value.coupon_rights = false
+    formData.value.contract_term = null
+    currentItemRowData.value = {}
+
+    // fill moths data with values
+    for (let index = 0; index < months.value.length; index++) {
+      numOfCoupons.value[index] = 0
+    }
   }
 })
 
 const HandleSubmitRequest = async () => {
+  // Update the fields in formData
   sentData.value = {
-    name: formData.value.username,
+    name: formData.value.name,
     surname: formData.value.surname,
     email: formData.value.email,
     phone: formData.value.phone,
-    contract_term: formData.value.contactTerm ? dayjs(formData.value.contactTerm).toISOString(): null,
-    coupon_rights: couponsRight.value,
-    january: numOfCoupons.value[0],
-    february: numOfCoupons.value[1],
-    march: numOfCoupons.value[2],
-    april: numOfCoupons.value[3],
-    may: numOfCoupons.value[4],
-    june: numOfCoupons.value[5],
-    july: numOfCoupons.value[6],
-    august: numOfCoupons.value[7],
-    september: numOfCoupons.value[8],
-    october: numOfCoupons.value[9],
-    november: numOfCoupons.value[10],
-    december: numOfCoupons.value[11]
+    contract_term: formData.value.contract_term
+  }
+  // fill moths data with values
+  for (let index = 0; index < months.value.length; index++) {
+    sentData.value[months.value[index]] = numOfCoupons.value[index]
   }
 
   try {
@@ -204,6 +254,52 @@ const HandleSubmitRequest = async () => {
       progress: true,
       timeout: 1500
     })
+  }
+}
+
+const HandleUpdateRequest = async () => {
+  // Update the fields in formData TO SENT
+  sentData.value = {
+    name: formData.value.name,
+    surname: formData.value.surname,
+    email: formData.value.email,
+    phone: formData.value.phone,
+    contract_term: formData.value.contract_term,
+    coupon_rights: formData.value.coupon_rights
+  }
+  // fill moths data with values TO SENT
+  for (let index = 0; index < months.value.length; index++) {
+    sentData.value[months.value[index]] = numOfCoupons.value[index]
+  }
+  try {
+    const { error } = await supabase
+      .from('staff')
+      .update(sentData.value)
+      .eq('id', currentItemRowData.value.id)
+    if (error) throw error
+  } catch (error) {
+    if (error instanceof Error) {
+      alert(error.message)
+    }
+  } finally {
+    emits('dataFromServer')
+    toggleModal.value = false
+    $q.notify({
+      position: 'top',
+      message: i18n.t('editDataMsg'),
+      color: 'primary',
+      type: 'positive',
+      progress: true,
+      timeout: 1500
+    })
+  }
+}
+
+const HandleSubmissions = () => {
+  if (toggleModalMode.value === Constants.addMode) {
+    HandleSubmitRequest()
+  } else if (toggleModalMode.value === Constants.editMode) {
+    HandleUpdateRequest()
   }
 }
 </script>

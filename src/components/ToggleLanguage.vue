@@ -16,12 +16,13 @@
 <script setup>
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import Constants from 'src/constants/index'
 
 const i18n = useI18n()
 const selectedLang = ref(i18n.locale)
 
 const languages = [
-  { label: 'ΕΛ', value: 'el' },
-  { label: 'EN', value: 'en' }
+  { label: Constants.capEl, value: Constants.el },
+  { label: Constants.capEN, value: Constants.en }
 ]
 </script>

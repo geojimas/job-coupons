@@ -4,11 +4,12 @@ export default {
   login: 'Login',
   logout: 'logout',
   profile: 'profile',
-  exportToCSV: 'export To CSV',
+  exportToCSV: 'export To Xcel',
   staffTable: 'Staff Table',
   Columns: 'Columns',
   Search: 'Search..',
   Add: 'Add',
+  edit: 'Edit',
   username: 'Name',
   surname: 'Surname',
   email: 'Email',
@@ -39,6 +40,7 @@ export default {
   validPhone1: 'Use maximum 10 characters',
   validPhone2: 'Use only Numbers',
   postDataMsg: 'successfully Created',
+  editDataMsg: 'successfully Edited',
   deleteConf: 'Are you sure you want to delete this ?',
   confirm: 'Confirmation',
   deleteMsg: 'User {name} successfully deleted',
@@ -46,5 +48,6 @@ export default {
   totalCoupons: 'Total Coupons',
   actions: 'Actions',
   staffWithCoupons: 'staff With Coupons',
-  average: 'Average'
+  average: 'Average',
+  loading: 'Loading...'
 }

@@ -2,21 +2,21 @@
   <div class="q-pa-xl">
     <q-table
       :title="`${$t('staffTable')}`"
-      :rows="rows"
+      :rows="props.dataFromServer"
       :columns="columns"
-      :loading="loadingState"
+      :loading="props.loadingState"
       :pagination.sync="pagination"
       :filter="filter"
+      no-data
       :no-data-label="`${$t('serverNotFound')}`"
       dense
       flat
       bordered
-      no-data
       color="secondary"
       class="animate__animated animate__fadeIn"
       row-key="id">
       <template v-slot:top-right="props">
-        <StaffDialog @dataFromServer="getDataFromServer" />
+        <StaffDialog ref="staffDialogRef" @dataFromServer="getDataFromServerParent" />
         <q-input
           class="q-mr-md"
           dense
@@ -42,7 +42,13 @@
       </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
-          <q-btn color="secondary" class="q-mr-sm" flat debounce="300" icon="mode_edit"></q-btn>
+          <q-btn
+            color="secondary"
+            class="q-mr-sm"
+            flat
+            debounce="300"
+            icon="mode_edit"
+            @click="callChildOpenModalMethod(props.row)"></q-btn>
           <q-btn
             color="negative"
             debounce="300"
@@ -57,14 +63,26 @@
 
 <script setup>
 import { exportFile, useQuasar } from 'quasar'
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { supabase } from '../boot/supabase'
 import { useI18n } from 'vue-i18n'
 import StaffDialog from '../components/StaffDialog.vue'
 import dayjs from 'dayjs'
 
-const loadingState = ref(true)
-const rows = ref([])
+const emits = defineEmits(['getServerBackFromParents'])
+
+const props = defineProps({
+  dataFromServer: {
+    type: Array,
+    required: true
+  },
+  loadingState: {
+    type: Boolean,
+    required: true
+  }
+})
+
+const staffDialogRef = ref(null)
 const filter = ref('')
 const $q = useQuasar()
 const i18n = useI18n()
@@ -74,19 +92,13 @@ const pagination = ref({
   rowsPerPage: 10
 })
 
-onMounted(() => {
-  getDataFromServer()
-})
-const getDataFromServer = async () => {
-  try {
-    let { data, error } = await supabase.from('staff').select('*')
-    rows.value = data
-    loadingState.value = false
-    if (error) throw error
-  } catch (error) {
-    if (error instanceof Error) {
-      alert(error.message)
-    }
+const getDataFromServerParent = () => {
+  emits('getServerBackFromParents')
+}
+
+const callChildOpenModalMethod = (data) => {
+  if (staffDialogRef.value) {
+    staffDialogRef.value.openModal(data)
   }
 }
 
@@ -108,22 +120,19 @@ const handleDeleteRequest = data => {
       color: 'negative'
     }
   }).onOk(async () => {
-    loadingState.value = true
     try {
       const { error } = await supabase.from('staff').delete().eq('id', data.id)
-      loadingState.value = false
       if (error) throw error
+      getDataFromServerParent()
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message)
       }
     } finally {
-      getDataFromServer()
-      loadingState.value = false
       $q.notify({
         position: 'top',
         message: i18n.t('deleteMsg', { name: data.surname }),
-        color: 'primary',
+        color: 'negative',
         type: 'positive',
         progress: true,
         timeout: 1500
@@ -152,7 +161,7 @@ function exportTable() {
   // naive encoding to csv format
   const content = [columns.value.map(col => wrapCsvValue(col.label))]
     .concat(
-      rows.value.map(row =>
+      props.dataFromServer.value.map(row =>
         columns.value
           .map(col =>
             wrapCsvValue(
