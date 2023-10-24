@@ -22,6 +22,7 @@
               <q-input
                 outlined
                 name="name"
+                style="width: 220px"
                 color="secondary"
                 lazy-rules
                 :rules="[
@@ -36,6 +37,7 @@
               <q-input
                 outlined
                 name="surname"
+                style="width: 220px"
                 color="secondary"
                 lazy-rules
                 :rules="[
@@ -52,6 +54,7 @@
               <q-input
                 outlined
                 name="email"
+                style="width: 220px"
                 color="secondary"
                 type="email"
                 lazy-rules
@@ -63,6 +66,7 @@
               <q-input
                 outlined
                 name="phone"
+                style="width: 220px"
                 color="secondary"
                 type="tel"
                 lazy-rules
@@ -79,6 +83,7 @@
               <q-input
                 :label="`${$t('contractExp')}`"
                 outlined
+                style="width: 220px"
                 name="contactTerm"
                 color="secondary"
                 v-model="formData.contract_term">
@@ -175,7 +180,6 @@ const openModal = payload => {
   if (payload) {
     currentItemRowData.value = payload
     toggleModalMode.value = Constants.editMode
-    console.log('EDIT MODE')
     // Update the fields in FORM
     for (const key in formData.value) {
       if (currentItemRowData.value[key] !== undefined) {
@@ -191,7 +195,6 @@ const openModal = payload => {
     }
   } else {
     toggleModalMode.value = Constants.addMode
-    console.log('ADD MODE')
   }
   toggleModal.value = true
 }

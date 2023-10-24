@@ -8,7 +8,7 @@ export default {
   staffTable: 'Staff Table',
   Columns: 'Columns',
   Search: 'Search..',
-  Add: 'Add',
+  add: 'Add',
   edit: 'Edit',
   username: 'Name',
   surname: 'Surname',
