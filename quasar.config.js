@@ -53,10 +53,9 @@ module.exports = configure(function (/* ctx */) {
       // publicPath: '/',
       // analyze: true,
       env: {
-        VITE_ADMIN_EMAIL: import.meta.env.VITE_ADMIN_EMAIL,
-        VITE_ADMIN_PASSWORD: import.meta.env.VITE_ADMIN_PASSWORD,
-        VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
-        VITE_SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY
+        SUPABASE_URL: 'https://aippqjxsxgzrqynmhitk.supabase.co',
+        SUPABASE_ANON_KEY:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpcHBxanhzeGd6cnF5bm1oaXRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTc4MzMzODgsImV4cCI6MjAxMzQwOTM4OH0.Fr2azE7B1v4Y-zI9yhw_z0q41hRFnY4IBK_JThbVM_w'
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
