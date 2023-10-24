@@ -52,7 +52,12 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        VITE_ADMIN_EMAIL: import.meta.env.VITE_ADMIN_EMAIL,
+        VITE_ADMIN_PASSWORD: import.meta.env.VITE_ADMIN_PASSWORD,
+        VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
+        VITE_SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
