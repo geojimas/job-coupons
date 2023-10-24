@@ -1,12 +1,17 @@
 <template>
   <div class="q-pa-xl">
     <q-table
-      dense
       :title="`${$t('staffTable')}`"
       :rows="rows"
       :columns="columns"
       :loading="loadingState"
+      :pagination.sync="pagination"
       :filter="filter"
+      :no-data-label="`${$t('serverNotFound')}`"
+      dense
+      flat
+      bordered
+      no-data
       color="secondary"
       class="animate__animated animate__fadeIn"
       row-key="id">
@@ -23,20 +28,6 @@
             <q-icon name="search" />
           </template>
         </q-input>
-        <!-- <q-select
-          v-model="visibleColumns"
-          class="q-mr-md"
-          multiple
-          outlined
-          dense
-          options-dense
-          :display-value="$t('Columns')"
-          emit-value
-          map-options
-          :options="columns"
-          option-value="name"
-          options-cover
-          style="min-width: 150px" /> -->
         <q-btn
           color="secondary"
           icon-right="archive"
@@ -52,7 +43,12 @@
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <q-btn color="secondary" class="q-mr-sm" flat debounce="300" icon="mode_edit"></q-btn>
-          <q-btn color="negative" debounce="300" flat icon="delete"></q-btn>
+          <q-btn
+            color="negative"
+            debounce="300"
+            flat
+            icon="delete"
+            @click="handleDeleteRequest(props.row)"></q-btn>
         </q-td>
       </template>
     </q-table>
@@ -60,20 +56,27 @@
 </template>
 
 <script setup>
-import { exportFile } from 'quasar'
+import { exportFile, useQuasar } from 'quasar'
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../boot/supabase'
+import { useI18n } from 'vue-i18n'
 import StaffDialog from '../components/StaffDialog.vue'
 import dayjs from 'dayjs'
 
 const loadingState = ref(true)
 const rows = ref([])
 const filter = ref('')
+const $q = useQuasar()
+const i18n = useI18n()
+const pagination = ref({
+  sortBy: 'name',
+  descending: false,
+  rowsPerPage: 10
+})
 
 onMounted(() => {
   getDataFromServer()
 })
-
 const getDataFromServer = async () => {
   try {
     let { data, error } = await supabase.from('staff').select('*')
@@ -85,6 +88,48 @@ const getDataFromServer = async () => {
       alert(error.message)
     }
   }
+}
+
+const handleDeleteRequest = data => {
+  $q.dialog({
+    color: 'negative',
+    title: i18n.t('confirm'),
+    message: i18n.t('deleteConf'),
+    cancel: true,
+    persistent: true,
+    ok: {
+      push: true,
+      label: i18n.t('yes'),
+      color: 'secondary'
+    },
+    cancel: {
+      push: true,
+      label: i18n.t('no'),
+      color: 'negative'
+    }
+  }).onOk(async () => {
+    loadingState.value = true
+    try {
+      const { error } = await supabase.from('staff').delete().eq('id', data.id)
+      loadingState.value = false
+      if (error) throw error
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message)
+      }
+    } finally {
+      getDataFromServer()
+      loadingState.value = false
+      $q.notify({
+        position: 'top',
+        message: i18n.t('deleteMsg', { name: data.surname }),
+        color: 'primary',
+        type: 'positive',
+        progress: true,
+        timeout: 1500
+      })
+    }
+  })
 }
 
 function wrapCsvValue(val, formatFn, row) {
@@ -134,34 +179,10 @@ function exportTable() {
   }
 }
 
-// const visibleColumns = ref([
-//   'name',
-//   'surname',
-//   'email',
-//   'phone',
-//   'contract_term',
-//   'coupon_rights',
-//   'january',
-//   'february',
-//   'march',
-//   'april',
-//   'may',
-//   'june',
-//   'july',
-//   'august',
-//   'september',
-//   'october',
-//   'november',
-//   'august',
-//   'december',
-//   'total_coupons',
-//   'actions'
-// ])
-
-const columns = ref([
+const columns = computed(() => [
   {
     name: 'name',
-    label: 'Name',
+    label: i18n.t('username'),
     align: 'center',
     field: row => row.name,
     format: val => `${val}`,
@@ -169,7 +190,7 @@ const columns = ref([
   },
   {
     name: 'surname',
-    label: 'Surname',
+    label: i18n.t('surname'),
     align: 'center',
     field: row => row.surname,
     format: val => `${val}`,
@@ -177,7 +198,7 @@ const columns = ref([
   },
   {
     name: 'email',
-    label: 'E-mail',
+    label: i18n.t('email'),
     align: 'center',
     field: row => row.email,
     format: val => `${val}`,
@@ -186,7 +207,7 @@ const columns = ref([
 
   {
     name: 'phone',
-    label: 'Phone',
+    label: i18n.t('phone'),
     align: 'center',
     field: row => row.phone,
     format: val => `${val}`,
@@ -194,23 +215,23 @@ const columns = ref([
   },
   {
     name: 'contract_term',
-    label: 'Contract Termination',
+    label: i18n.t('contractExp'),
     align: 'center',
-    field: row => dayjs(row.contract_term).format('DD/MM/YYYY'),
+    field: row => (row.contract_term ? dayjs(row.contract_term).format('DD/MM/YYYY') : ''),
     format: val => `${val}`,
     sortable: true
   },
   {
     name: 'coupon_rights',
-    label: 'Coupon right',
+    label: i18n.t('couponsRights'),
     align: 'center',
-    field: row => (row.coupon_rights === false ? 'No' : 'Yes'),
+    field: row => (row.coupon_rights === false ? i18n.t('no') : i18n.t('yes')),
     format: val => `${val}`,
     sortable: true
   },
   {
     name: 'january',
-    label: 'January',
+    label: i18n.t('january'),
     align: 'center',
     field: row => row.january,
     format: val => `${val}`,
@@ -218,7 +239,7 @@ const columns = ref([
   },
   {
     name: 'february',
-    label: 'February',
+    label: i18n.t('february'),
     align: 'center',
     field: row => row.february,
     format: val => `${val}`,
@@ -226,7 +247,7 @@ const columns = ref([
   },
   {
     name: 'march',
-    label: 'March',
+    label: i18n.t('march'),
     align: 'center',
     field: row => row.march,
     format: val => `${val}`,
@@ -234,7 +255,7 @@ const columns = ref([
   },
   {
     name: 'april',
-    label: 'April',
+    label: i18n.t('april'),
     align: 'center',
     field: row => row.april,
     format: val => `${val}`,
@@ -242,7 +263,7 @@ const columns = ref([
   },
   {
     name: 'may',
-    label: 'May',
+    label: i18n.t('may'),
     align: 'center',
     field: row => row.may,
     format: val => `${val}`,
@@ -250,7 +271,7 @@ const columns = ref([
   },
   {
     name: 'june',
-    label: 'June',
+    label: i18n.t('june'),
     align: 'center',
     field: row => row.june,
     format: val => `${val}`,
@@ -258,7 +279,7 @@ const columns = ref([
   },
   {
     name: 'july',
-    label: 'July',
+    label: i18n.t('july'),
     align: 'center',
     field: row => row.july,
     format: val => `${val}`,
@@ -266,7 +287,7 @@ const columns = ref([
   },
   {
     name: 'august',
-    label: 'August',
+    label: i18n.t('august'),
     align: 'center',
     field: row => row.august,
     format: val => `${val}`,
@@ -274,7 +295,7 @@ const columns = ref([
   },
   {
     name: 'september',
-    label: 'September',
+    label: i18n.t('september'),
     align: 'center',
     field: row => row.september,
     format: val => `${val}`,
@@ -282,7 +303,7 @@ const columns = ref([
   },
   {
     name: 'october',
-    label: 'October',
+    label: i18n.t('october'),
     align: 'center',
     field: row => row.october,
     format: val => `${val}`,
@@ -290,7 +311,7 @@ const columns = ref([
   },
   {
     name: 'november',
-    label: 'November',
+    label: i18n.t('november'),
     align: 'center',
     field: row => row.november,
     format: val => `${val}`,
@@ -298,7 +319,7 @@ const columns = ref([
   },
   {
     name: 'december',
-    label: 'December',
+    label: i18n.t('december'),
     align: 'center',
     field: row => row.december,
     format: val => `${val}`,
@@ -306,7 +327,7 @@ const columns = ref([
   },
   {
     name: 'total_coupons',
-    label: 'Total Coupons',
+    label: i18n.t('totalCoupons'),
     align: 'center',
     field: row => row.total_coupons,
     format: val => `${val}`,
@@ -315,9 +336,7 @@ const columns = ref([
   {
     name: 'actions',
     align: 'center',
-    label: 'Actions',
-    field: 'actions',
-    sortable: true
+    label: i18n.t('actions')
   }
 ])
 </script>

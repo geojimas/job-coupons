@@ -9,17 +9,6 @@
       push />
     <q-dialog persistent v-model="toggleModal">
       <q-card-section style="max-height: 65vh" class="bg-white">
-        <!-- <q-header reveal elevated class="bg-secondary text-white">
-          <q-toolbar>
-            <q-toolbar-title>
-              <q-avatar>
-                <img src="../assets//add-person.png" alt="add Person" />
-              </q-avatar>
-              {{ $t('Add') }}
-            </q-toolbar-title>
-          </q-toolbar>
-        </q-header> -->
-        <!-- <q-btn color="negative" icon="close" @click="toggleModal = false" /> -->
         <q-form autofocus @submit="HandleSubmitRequest">
           <div class="row">
             <div class="col q-ma-sm">
@@ -84,10 +73,7 @@
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date
-                        minimal
-                        color="secondary"
-                        v-model="formData.contactTerm">
+                      <q-date minimal color="secondary" mask="DD/MM/YYYY" v-model="formData.contactTerm">
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup label="Close" color="secondary" flat />
                         </div>
@@ -132,9 +118,10 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import { supabase } from '../boot/supabase'
 import { useI18n } from 'vue-i18n'
+import dayjs from 'dayjs'
 
 const emits = defineEmits(['dataFromServer'])
 
@@ -183,7 +170,7 @@ const HandleSubmitRequest = async () => {
     surname: formData.value.surname,
     email: formData.value.email,
     phone: formData.value.phone,
-    contract_term: formData.value.contactTerm,
+    contract_term: formData.value.contactTerm ? dayjs(formData.value.contactTerm).toISOString(): null,
     coupon_rights: couponsRight.value,
     january: numOfCoupons.value[0],
     february: numOfCoupons.value[1],
@@ -211,7 +198,7 @@ const HandleSubmitRequest = async () => {
     toggleModal.value = false
     $q.notify({
       position: 'top',
-      message: `${i18n.t('postDataMsg')}`,
+      message: i18n.t('postDataMsg'),
       color: 'primary',
       type: 'positive',
       progress: true,

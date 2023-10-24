@@ -21,7 +21,7 @@
           color="dark"
           rounded
           size="md"
-          label="Sign in"
+          :label="`${$t('login')}`"
           no-caps
           class="full-width"></q-btn>
       </q-card-section>

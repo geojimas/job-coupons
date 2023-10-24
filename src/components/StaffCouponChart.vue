@@ -1,13 +1,17 @@
 <template>
-  <VueApexCharts class="animate__animated animate__fadeIn" width="470" type="donut" :options="options" :series="series"></VueApexCharts>
+  <VueApexCharts
+    class="animate__animated animate__fadeIn"
+    width="420"
+    type="donut"
+    :options="options"
+    :series="series"></VueApexCharts>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import { getCssVar } from 'quasar'
 import VueApexCharts from 'vue3-apexcharts'
 import { supabase } from '../boot/supabase'
-
 const loadingState = ref(true)
 const stuffData = ref([])
 
@@ -46,7 +50,7 @@ watch(stuffData, newStuffData => {
 const options = ref({
   title: {
     text: 'Κουπόνια προσωπικού',
-    align: 'left'
+    align: 'center'
   },
   chart: {
     id: 'apex-donut'

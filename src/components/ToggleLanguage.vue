@@ -2,7 +2,7 @@
   <div>
     <q-btn-toggle
       v-model="selectedLang"
-      active-class="active-toggle-btn"
+      class="q-mr-md"
       no-caps
       rounded
       unelevated
@@ -25,9 +25,3 @@ const languages = [
   { label: 'EN', value: 'en' }
 ]
 </script>
-
-<style scoped lang="scss">
-.active-toggle-btn {
-  text-decoration: underline;
-}
-</style>

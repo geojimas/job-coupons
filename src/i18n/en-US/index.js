@@ -1,6 +1,7 @@
 export default {
   info: 'Information',
   coupons: 'Coupons',
+  login: 'Login',
   logout: 'logout',
   profile: 'profile',
   exportToCSV: 'export To CSV',
@@ -8,7 +9,6 @@ export default {
   Columns: 'Columns',
   Search: 'Search..',
   Add: 'Add',
-  login: 'Login',
   username: 'Name',
   surname: 'Surname',
   email: 'Email',
@@ -28,6 +28,8 @@ export default {
   november: 'November',
   december: 'December',
   save: 'Save',
+  yes: 'yes',
+  no: 'Νο',
   cancel: 'Cancel',
   nameValidation1: 'Name is Required',
   nameValidation2: 'Name must be at least 3 chars long',
@@ -36,5 +38,13 @@ export default {
   validEmail: 'Enter a valid email address',
   validPhone1: 'Use maximum 10 characters',
   validPhone2: 'Use only Numbers',
-  postDataMsg: 'successfully Created'
+  postDataMsg: 'successfully Created',
+  deleteConf: 'Are you sure you want to delete this ?',
+  confirm: 'Confirmation',
+  deleteMsg: 'User {name} successfully deleted',
+  serverNotFound: "Didn't find anything :(",
+  totalCoupons: 'Total Coupons',
+  actions: 'Actions',
+  staffWithCoupons: 'staff With Coupons',
+  average: 'Average'
 }
