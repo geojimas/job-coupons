@@ -140,7 +140,6 @@ import { useQuasar } from 'quasar'
 import { ref, watch, computed } from 'vue'
 import { supabase } from '../boot/supabase'
 import { useI18n } from 'vue-i18n'
-import dayjs from 'dayjs'
 import Constants from 'src/constants/index'
 
 const emits = defineEmits(['dataFromServer'])
