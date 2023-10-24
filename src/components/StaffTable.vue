@@ -83,6 +83,9 @@ const props = defineProps({
 })
 
 const staffDialogRef = ref(null)
+const dataForExport = computed(() => {
+  return props.dataFromServer
+})
 const filter = ref('')
 const $q = useQuasar()
 const i18n = useI18n()
@@ -96,7 +99,7 @@ const getDataFromServerParent = () => {
   emits('getServerBackFromParents')
 }
 
-const callChildOpenModalMethod = (data) => {
+const callChildOpenModalMethod = data => {
   if (staffDialogRef.value) {
     staffDialogRef.value.openModal(data)
   }
@@ -158,11 +161,15 @@ function wrapCsvValue(val, formatFn, row) {
 }
 
 function exportTable() {
-  // naive encoding to csv format
-  const content = [columns.value.map(col => wrapCsvValue(col.label))]
+  // Copy the columns array and exclude the last column
+  const columnsToExport = [...columns.value]
+  columnsToExport.pop() // Remove the last column
+
+  // Naive encoding to csv format
+  const content = [columnsToExport.map(col => wrapCsvValue(col.label))]
     .concat(
-      props.dataFromServer.value.map(row =>
-        columns.value
+      dataForExport.value.map(row =>
+        columnsToExport
           .map(col =>
             wrapCsvValue(
               typeof col.field === 'function'
