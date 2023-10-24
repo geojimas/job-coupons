@@ -134,7 +134,7 @@ const handleDeleteRequest = data => {
     } finally {
       $q.notify({
         position: 'top',
-        message: i18n.t('deleteMsg', { name: data.surname }),
+        message: i18n.t('deleteMsg', { name: data.name }),
         color: 'negative',
         type: 'positive',
         progress: true,
