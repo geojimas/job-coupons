@@ -17,6 +17,9 @@
 import { computed } from 'vue'
 import { getCssVar } from 'quasar'
 import VueApexCharts from 'vue3-apexcharts'
+import { useI18n } from 'vue-i18n'
+
+const i18n = useI18n()
 
 const props = defineProps({
   numberOfPeopleWithCouponRightsValue: {
@@ -36,7 +39,7 @@ const props = defineProps({
 const options = computed(() => {
   return {
     title: {
-      text: 'Κουπόνια προσωπικού',
+      text: i18n.t('staffCoupon'),
       align: 'center'
     },
     chart: {
@@ -49,7 +52,7 @@ const options = computed(() => {
         sizeOffset: 6
       }
     },
-    labels: ['Με κουπόνια', 'Χωρίς Κουπόνια'],
+    labels: [i18n.t('withCoupon'), i18n.t('withoutCoupon')],
     plotOptions: {
       pie: {
         donut: {
@@ -58,7 +61,7 @@ const options = computed(() => {
             total: {
               show: true,
               showAlways: true,
-              label: 'Σύνολο',
+              label: i18n.t('total'),
               fontSize: '20px',
               fontWeight: 600,
               color: '#373d3f',

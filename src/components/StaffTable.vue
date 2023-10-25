@@ -8,6 +8,7 @@
       :pagination.sync="pagination"
       :filter="filter"
       no-data
+      :rows-per-page-label="`${$t('rowsPerPage')}`"
       :no-data-label="`${$t('serverNotFound')}`"
       dense
       flat

@@ -49,5 +49,10 @@ export default {
   actions: 'Actions',
   staffWithCoupons: 'staff With Coupons',
   average: 'Average',
-  loading: 'Loading...'
+  loading: 'Loading...',
+  staffCoupon: `Staff's coupons`,
+  total: 'Total',
+  withCoupon: 'With Coupons',
+  withoutCoupon: 'Without Coupons',
+  rowsPerPage:'rows per Page'
 }

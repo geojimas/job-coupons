@@ -50,4 +50,9 @@ export default {
   staffWithCoupons: 'Προσωπικό με κουπόνια',
   average: 'Μέσος Όρος',
   loading: 'Φόρτωση...',
+  staffCoupon: 'Κουπόνια προσωπικού',
+  total: 'Σύνολο',
+  withCoupon: 'Με κουπόνια',
+  withoutCoupon: 'Χωρίς Κουπόνια',
+  rowsPerPage:'Εγραφές ανά σελίδα'
 }
