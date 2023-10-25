@@ -6,9 +6,8 @@
   "author": "Dimitris Georgiadis",
   "private": false,
   "scripts": {
-    "dev": "quasar dev",
-    "build": "quasar build",
-    "start": "quasar start",
+    "dev": "quasar dev -m pwa",
+    "build": "quasar build -m pwa",
     "v": "quasar --version"
   },
   "dependencies": {

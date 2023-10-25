@@ -22,7 +22,7 @@
               <q-input
                 outlined
                 name="name"
-                style="width: 220px"
+                style="max-width: 220px"
                 color="secondary"
                 lazy-rules
                 :rules="[
@@ -37,7 +37,7 @@
               <q-input
                 outlined
                 name="surname"
-                style="width: 220px"
+                style="max-width: 220px"
                 color="secondary"
                 lazy-rules
                 :rules="[
@@ -54,7 +54,7 @@
               <q-input
                 outlined
                 name="email"
-                style="width: 220px"
+                style="max-width: 220px"
                 color="secondary"
                 type="email"
                 lazy-rules
@@ -66,7 +66,7 @@
               <q-input
                 outlined
                 name="phone"
-                style="width: 220px"
+                style="max-width: 220px"
                 color="secondary"
                 type="tel"
                 lazy-rules
@@ -83,7 +83,7 @@
               <q-input
                 :label="`${$t('contractExp')}`"
                 outlined
-                style="width: 220px"
+                style="max-width: 220px"
                 name="contactTerm"
                 color="secondary"
                 v-model="formData.contract_term">

@@ -8,7 +8,7 @@ export default {
   staffTable: 'Πίνακας προσωπικού',
   Columns: 'Στηλες',
   Search: 'Αναζητήση..',
-  add: 'Προσθήκη',
+  add: 'Προσθηκη',
   edit: 'Επεξεργασία',
   username: 'Όνομα',
   surname: 'Επώνυμο',
