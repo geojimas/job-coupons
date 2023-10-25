@@ -13,6 +13,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&family=Play&family=Playpen+Sans&display=swap" rel="stylesheet">
+    <% if (ctx.mode.pwa) { %>
+      <meta name="theme-color" content="<%= pwaManifest.theme_color %>">
+      <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="<%= pwaManifest.theme_color %>">
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="default">
+      <meta name="msapplication-TileImage" content="icons/coupons-icon-128x128.png">
+      <meta name="msapplication-TileColor" content="#000000">
+      <meta name="apple-mobile-web-app-title" content="<%= pwaManifest.name %>">
+      <link rel="apple-touch-icon" href="icons/coupons-icon-128x128.png">
+      <link rel="apple-touch-icon" sizes="152x152" href="icons/coupons-icon-128x128.png">
+      <link rel="apple-touch-icon" sizes="167x167" href="icons/coupons-icon-256x256.png">
+      <link rel="apple-touch-icon" sizes="180x180" href="icons/coupons-icon-256x256.png">
+    <% } %>
   </head>
   <body>
     <!-- quasar:entry-point -->
