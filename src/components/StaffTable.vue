@@ -128,11 +128,6 @@ const handleDeleteRequest = data => {
       const { error } = await supabase.from('staff').delete().eq('id', data.id)
       if (error) throw error
       getDataFromServerParent()
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message)
-      }
-    } finally {
       $q.notify({
         position: 'top',
         message: i18n.t('deleteMsg', { name: data.name }),
@@ -141,6 +136,10 @@ const handleDeleteRequest = data => {
         progress: true,
         timeout: 1500
       })
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message)
+      }
     }
   })
 }
@@ -250,7 +249,7 @@ const columns = computed(() => [
     name: 'january',
     label: i18n.t('january'),
     align: 'center',
-    field: row => row.january === 0 ? '' : row.january,
+    field: row => (row.january === 0 ? '' : row.january),
     format: val => `${val}`,
     sortable: true
   },
@@ -258,7 +257,7 @@ const columns = computed(() => [
     name: 'february',
     label: i18n.t('february'),
     align: 'center',
-    field: row => row.february === 0 ? '' : row.february,
+    field: row => (row.february === 0 ? '' : row.february),
     format: val => `${val}`,
     sortable: true
   },
@@ -266,7 +265,7 @@ const columns = computed(() => [
     name: 'march',
     label: i18n.t('march'),
     align: 'center',
-    field: row => row.march === 0 ? '' : row.march,
+    field: row => (row.march === 0 ? '' : row.march),
     format: val => `${val}`,
     sortable: true
   },
@@ -274,7 +273,7 @@ const columns = computed(() => [
     name: 'april',
     label: i18n.t('april'),
     align: 'center',
-    field: row => row.april === 0 ? '' : row.april,
+    field: row => (row.april === 0 ? '' : row.april),
     format: val => `${val}`,
     sortable: true
   },
@@ -282,7 +281,7 @@ const columns = computed(() => [
     name: 'may',
     label: i18n.t('may'),
     align: 'center',
-    field: row => row.may === 0 ? '' : row.may,
+    field: row => (row.may === 0 ? '' : row.may),
     format: val => `${val}`,
     sortable: true
   },
@@ -290,7 +289,7 @@ const columns = computed(() => [
     name: 'june',
     label: i18n.t('june'),
     align: 'center',
-    field: row => row.june === 0 ? '' : row.june,
+    field: row => (row.june === 0 ? '' : row.june),
     format: val => `${val}`,
     sortable: true
   },
@@ -298,7 +297,7 @@ const columns = computed(() => [
     name: 'july',
     label: i18n.t('july'),
     align: 'center',
-    field: row => row.july === 0 ? '' : row.july,
+    field: row => (row.july === 0 ? '' : row.july),
     format: val => `${val}`,
     sortable: true
   },
@@ -306,7 +305,7 @@ const columns = computed(() => [
     name: 'august',
     label: i18n.t('august'),
     align: 'center',
-    field: row => row.august === 0 ? '' : row.august,
+    field: row => (row.august === 0 ? '' : row.august),
     format: val => `${val}`,
     sortable: true
   },
@@ -314,7 +313,7 @@ const columns = computed(() => [
     name: 'september',
     label: i18n.t('september'),
     align: 'center',
-    field: row => row.september === 0 ? '' : row.september,
+    field: row => (row.september === 0 ? '' : row.september),
     format: val => `${val}`,
     sortable: true
   },
@@ -322,7 +321,7 @@ const columns = computed(() => [
     name: 'october',
     label: i18n.t('october'),
     align: 'center',
-    field: row => row.october === 0 ? '' : row.october,
+    field: row => (row.october === 0 ? '' : row.october),
     format: val => `${val}`,
     sortable: true
   },
@@ -330,7 +329,7 @@ const columns = computed(() => [
     name: 'november',
     label: i18n.t('november'),
     align: 'center',
-    field: row => row.november === 0 ? '' : row.november,
+    field: row => (row.november === 0 ? '' : row.november),
     format: val => `${val}`,
     sortable: true
   },
@@ -338,7 +337,7 @@ const columns = computed(() => [
     name: 'december',
     label: i18n.t('december'),
     align: 'center',
-    field: row => row.december === 0 ? '' : row.december,
+    field: row => (row.december === 0 ? '' : row.december),
     format: val => `${val}`,
     sortable: true
   },
