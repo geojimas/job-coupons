@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue'
+import { ref, computed } from 'vue'
 import Constants from 'src/constants/index'
 import { useLanguageStore } from '../stores/languageStore'
 
@@ -35,7 +35,4 @@ const changeLanguage = computed({
   }
 })
 
-watch(selectedLang, newLang => {
-  store.setAppLanguage(newLang)
-})
 </script>

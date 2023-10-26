@@ -21,6 +21,7 @@
             <div class="col q-ma-sm">
               <q-input
                 outlined
+                autocomplete="off"
                 name="name"
                 style="max-width: 220px"
                 color="secondary"
@@ -36,6 +37,7 @@
             <div class="col q-ma-sm">
               <q-input
                 outlined
+                autocomplete="off"
                 name="surname"
                 style="max-width: 220px"
                 color="secondary"
@@ -54,6 +56,7 @@
               <q-input
                 outlined
                 name="email"
+                autocomplete="off"
                 style="max-width: 220px"
                 color="secondary"
                 type="email"
@@ -66,6 +69,7 @@
               <q-input
                 outlined
                 name="phone"
+                autocomplete="off"
                 style="max-width: 220px"
                 color="secondary"
                 type="tel"
@@ -83,8 +87,9 @@
               <q-input
                 :label="`${$t('contractExp')}`"
                 outlined
+                autocomplete="off"
                 style="max-width: 220px"
-                :rules="[val => /^(\d{2}\/){2}\d{4}$/.test(val) || `${$t('validDate')}`]"
+                :rules="[val => !val || /^(?:\d{2}\/){2}\d{4}$/.test(val) || $t('validDate')]"
                 lazy-rules
                 name="contactTerm"
                 color="secondary"
@@ -123,6 +128,7 @@
             <div class="q-ma-sm" v-for="(value, index) in numOfCoupons" :key="index">
               <q-input
                 outlined
+                autocomplete="off"
                 :name="`'${value}'`"
                 style="width: 105px"
                 color="secondary"
@@ -288,9 +294,7 @@ const HandleUpdateRequest = async () => {
   // fill moths data with values TO SENT
   for (let index = 0; index < months.value.length; index++) {
     sentData.value[months.value[index]] = numOfCoupons.value[index]
-    numOfCoupons.value[index] !== 0
-      ? (sentData.value.coupon_rights = true)
-      : (sentData.value.coupon_rights = false)
+    if (numOfCoupons.value[index] !== 0) sentData.value.coupon_rights = true
   }
 
   try {
