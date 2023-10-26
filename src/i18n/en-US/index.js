@@ -39,6 +39,7 @@ export default {
   validEmail: 'Enter a valid email address',
   validPhone1: 'Use maximum 10 characters',
   validPhone2: 'Use only Numbers',
+  validDate: 'Select a valid Date',
   postDataMsg: 'successfully Created',
   editDataMsg: 'successfully Edited',
   deleteConf: 'Are you sure you want to delete this ?',

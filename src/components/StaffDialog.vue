@@ -84,13 +84,19 @@
                 :label="`${$t('contractExp')}`"
                 outlined
                 style="max-width: 220px"
+                :rules="[val => /^(\d{2}\/){2}\d{4}$/.test(val) || `${$t('validDate')}`]"
+                lazy-rules
                 name="contactTerm"
                 color="secondary"
                 v-model="formData.contract_term">
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date minimal color="secondary" v-model="formData.contract_term">
+                      <q-date
+                        minimal
+                        mask="DD/MM/YYYY"
+                        color="secondary"
+                        v-model="formData.contract_term">
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup label="Close" color="secondary" flat />
                         </div>
@@ -141,6 +147,7 @@ import { ref, watch, computed } from 'vue'
 import { supabase } from '../boot/supabase'
 import { useI18n } from 'vue-i18n'
 import Constants from 'src/constants/index'
+import dayjs from 'dayjs'
 
 const emits = defineEmits(['dataFromServer'])
 
@@ -181,14 +188,16 @@ const openModal = payload => {
     toggleModalMode.value = Constants.editMode
     // Update the fields in FORM
     for (const key in formData.value) {
-      if (currentItemRowData.value[key] !== undefined) {
-        formData.value[key] = currentItemRowData.value[key]
+      if (currentItemRowData.value[key] !== null) {
+        if (key === 'contract_term') {
+          formData.value[key] = dayjs(currentItemRowData.value[key]).format('DD/MM/YYYY')
+        } else formData.value[key] = currentItemRowData.value[key]
       }
     }
     // Update form with the values in numOfCoupons  in FORM
     for (let index = 0; index < numOfCoupons.value.length; index++) {
       const monthKey = Constants[months.value[index].toLowerCase()]
-      if (currentItemRowData.value[monthKey] !== undefined) {
+      if (currentItemRowData.value[monthKey] !== null) {
         numOfCoupons.value[index] = currentItemRowData.value[monthKey]
       }
     }
@@ -231,7 +240,9 @@ const HandleSubmitRequest = async () => {
     surname: formData.value.surname,
     email: formData.value.email,
     phone: formData.value.phone,
-    coupon_rights: formData.value.coupon_rights,
+    contract_term: formData.value.contract_term
+      ? dayjs(formData.value.contract_term).format('DD/MM/YYYY')
+      : formData.value.contract_term,
     contract_term: formData.value.contract_term
   }
 
@@ -268,17 +279,21 @@ const HandleUpdateRequest = async () => {
     surname: formData.value.surname,
     email: formData.value.email,
     phone: formData.value.phone,
-    contract_term: formData.value.contract_term,
+    contract_term: formData.value.contract_term
+      ? dayjs(formData.value.contract_term).format('YYYY/MM/DD')
+      : formData.value.contract_term,
     coupon_rights: formData.value.coupon_rights
   }
 
   // fill moths data with values TO SENT
   for (let index = 0; index < months.value.length; index++) {
     sentData.value[months.value[index]] = numOfCoupons.value[index]
+    numOfCoupons.value[index] !== 0
+      ? (sentData.value.coupon_rights = true)
+      : (sentData.value.coupon_rights = false)
   }
 
   try {
-    console.log(sentData.value)
     const { error } = await supabase
       .from('staff')
       .update(sentData.value)
