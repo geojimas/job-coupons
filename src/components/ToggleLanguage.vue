@@ -31,8 +31,9 @@ const changeLanguage = computed({
   get: () => selectedLang.value,
   set: newLang => {
     store.setAppLanguage(newLang)
-    location.reload()
+    window.location.replace(
+      window.location.pathname + window.location.search + window.location.hash
+    )
   }
 })
-
 </script>
