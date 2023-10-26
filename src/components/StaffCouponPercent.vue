@@ -45,7 +45,7 @@ const options = computed(() => {
       text: i18n.t('staffWithCoupons'),
       align: 'center'
     },
-    colors: [getCssVar('secondary')],
+    colors: [getCssVar('primary')],
     plotOptions: {
       radialBar: {
         startAngle: -90,
@@ -90,6 +90,8 @@ const options = computed(() => {
 })
 
 const series = computed(() => {
-  return [props.percentagePeopleWithCouponRights]
+  return [
+    isNaN(props.percentagePeopleWithCouponRights) ? 0 : props.percentagePeopleWithCouponRights
+  ]
 })
 </script>

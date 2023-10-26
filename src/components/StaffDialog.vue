@@ -231,8 +231,10 @@ const HandleSubmitRequest = async () => {
     surname: formData.value.surname,
     email: formData.value.email,
     phone: formData.value.phone,
+    coupon_rights: formData.value.coupon_rights,
     contract_term: formData.value.contract_term
   }
+
   // fill moths data with values
   for (let index = 0; index < months.value.length; index++) {
     sentData.value[months.value[index]] = numOfCoupons.value[index]
@@ -269,11 +271,14 @@ const HandleUpdateRequest = async () => {
     contract_term: formData.value.contract_term,
     coupon_rights: formData.value.coupon_rights
   }
+
   // fill moths data with values TO SENT
   for (let index = 0; index < months.value.length; index++) {
     sentData.value[months.value[index]] = numOfCoupons.value[index]
   }
+
   try {
+    console.log(sentData.value)
     const { error } = await supabase
       .from('staff')
       .update(sentData.value)
