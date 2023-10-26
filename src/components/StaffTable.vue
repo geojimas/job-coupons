@@ -127,7 +127,6 @@ const handleDeleteRequest = data => {
     try {
       const { error } = await supabase.from('staff').delete().eq('id', data.id)
       if (error) throw error
-      getDataFromServerParent()
       $q.notify({
         position: 'top',
         message: i18n.t('deleteMsg', { name: data.name }),
@@ -136,6 +135,7 @@ const handleDeleteRequest = data => {
         progress: true,
         timeout: 1500
       })
+      getDataFromServerParent()
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message)

@@ -255,6 +255,7 @@ const HandleSubmitRequest = async () => {
   // fill moths data with values
   for (let index = 0; index < months.value.length; index++) {
     sentData.value[months.value[index]] = numOfCoupons.value[index]
+    if (numOfCoupons.value[index] !== 0) sentData.value.coupon_rights = true
   }
 
   try {
