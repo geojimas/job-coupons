@@ -55,5 +55,6 @@ export default {
   total: 'Σύνολο',
   withCoupon: 'Με κουπόνια',
   withoutCoupon: 'Χωρίς Κουπόνια',
-  rowsPerPage:'Εγραφές ανά σελίδα'
+  rowsPerPage:'Εγραφές ανά σελίδα',
+  connectedWith: 'Συνδεδεμένος με :'
 }

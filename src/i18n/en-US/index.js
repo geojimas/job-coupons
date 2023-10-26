@@ -55,5 +55,6 @@ export default {
   total: 'Total',
   withCoupon: 'With Coupons',
   withoutCoupon: 'Without Coupons',
-  rowsPerPage:'rows per Page'
+  rowsPerPage:'rows per Page',
+  connectedWith: 'Connected With :'
 }
