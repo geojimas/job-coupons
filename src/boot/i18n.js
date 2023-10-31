@@ -7,6 +7,7 @@ const store = useLanguageStore()
 
 export default boot(({ app }) => {
   const i18n = createI18n({
+    legacy: false,
     locale: store.getAppLanguage,
     globalInjection: true,
     messages

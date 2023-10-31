@@ -125,21 +125,28 @@ const handleDeleteRequest = data => {
     }
   }).onOk(async () => {
     try {
-      const { error } = await supabase.from('staff').delete().eq('id', data.id)
-      if (error) throw error
+      const { error: errorData } = await supabase.from('staff').delete().eq('id', data.id)
+      if (errorData) {
+        throw new Error(errorData.message)
+      }
       $q.notify({
         position: 'top',
         message: i18n.t('deleteMsg', { name: data.name }),
-        color: 'negative',
-        type: 'positive',
+        color: 'primary',
+        icon: 'thumb_up',
         progress: true,
         timeout: 1500
       })
       getDataFromServerParent()
     } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message)
-      }
+      $q.notify({
+        position: 'top',
+        message: error.message,
+        color: 'negative',
+        icon: 'report_problem',
+        progress: true,
+        timeout: 1500
+      })
     }
   })
 }
