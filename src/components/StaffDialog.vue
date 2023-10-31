@@ -89,19 +89,13 @@
                 outlined
                 autocomplete="off"
                 style="max-width: 220px"
-                :rules="[val => !val || /^(?:\d{2}\/){2}\d{4}$/.test(val) || $t('validDate')]"
-                lazy-rules
                 name="contactTerm"
                 color="secondary"
                 v-model="formData.contract_term">
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date
-                        minimal
-                        mask="DD/MM/YYYY"
-                        color="secondary"
-                        v-model="formData.contract_term">
+                      <q-date minimal color="secondary" v-model="formData.contract_term">
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup label="Close" color="secondary" flat />
                         </div>
@@ -130,9 +124,10 @@
                 outlined
                 autocomplete="off"
                 :name="`'${value}'`"
-                style="width: 105px"
+                style="width: 86px"
                 color="secondary"
                 type="tel"
+                :disable="formData.coupon_rights === false"
                 v-model="numOfCoupons[index]"
                 :label="$t(months[index])" />
             </div>
@@ -153,7 +148,6 @@ import { ref, watch, computed } from 'vue'
 import { supabase } from '../boot/supabase'
 import { useI18n } from 'vue-i18n'
 import Constants from 'src/constants/index'
-import dayjs from 'dayjs'
 
 const emits = defineEmits(['dataFromServer'])
 
@@ -195,9 +189,7 @@ const openModal = payload => {
     // Update the fields in FORM
     for (const key in formData.value) {
       if (currentItemRowData.value[key] !== null) {
-        if (key === 'contract_term') {
-          formData.value[key] = dayjs(currentItemRowData.value[key]).format('DD/MM/YYYY')
-        } else formData.value[key] = currentItemRowData.value[key]
+        formData.value[key] = currentItemRowData.value[key]
       }
     }
     // Update form with the values in numOfCoupons  in FORM
@@ -246,33 +238,36 @@ const HandleSubmitRequest = async () => {
     surname: formData.value.surname,
     email: formData.value.email,
     phone: formData.value.phone,
-    contract_term: formData.value.contract_term
-      ? dayjs(formData.value.contract_term).format('DD/MM/YYYY')
-      : formData.value.contract_term,
-    contract_term: formData.value.contract_term
+    contract_term: formData.value.contract_term,
+    coupon_rights: formData.value.coupon_rights
   }
 
   // fill moths data with values
   for (let index = 0; index < months.value.length; index++) {
     sentData.value[months.value[index]] = numOfCoupons.value[index]
-    if (numOfCoupons.value[index] !== 0) sentData.value.coupon_rights = true
   }
 
   try {
-    const { error } = await supabase.from('staff').insert(sentData.value)
-    if (error) throw error
-  } catch (error) {
-    if (error instanceof Error) {
-      alert(error.message)
+    const { error: errorData } = await supabase.from('staff').insert(sentData.value)
+    if (errorData) {
+      throw new Error(errorData.message)
     }
-  } finally {
     emits('dataFromServer')
     toggleModal.value = false
     $q.notify({
       position: 'top',
       message: i18n.t('postDataMsg'),
       color: 'primary',
-      type: 'positive',
+      icon: 'thumb_up',
+      progress: true,
+      timeout: 1500
+    })
+  } catch (error) {
+    $q.notify({
+      position: 'top',
+      message: error.message,
+      color: 'negative',
+      icon: 'report_problem',
       progress: true,
       timeout: 1500
     })
@@ -286,36 +281,42 @@ const HandleUpdateRequest = async () => {
     surname: formData.value.surname,
     email: formData.value.email,
     phone: formData.value.phone,
-    contract_term: formData.value.contract_term
-      ? dayjs(formData.value.contract_term).format('YYYY/MM/DD')
-      : formData.value.contract_term,
+    contract_term: formData.value.contract_term,
     coupon_rights: formData.value.coupon_rights
   }
 
   // fill moths data with values TO SENT
   for (let index = 0; index < months.value.length; index++) {
     sentData.value[months.value[index]] = numOfCoupons.value[index]
-    if (numOfCoupons.value[index] !== 0) sentData.value.coupon_rights = true
+    // Check if need the coupons are disabled and it has forgotten values
+    if (formData.value.coupon_rights === false && numOfCoupons.value[index] !== 0)
+      sentData.value[months.value[index]] = 0
   }
 
   try {
-    const { error } = await supabase
+    const { error: errorData } = await supabase
       .from('staff')
       .update(sentData.value)
       .eq('id', currentItemRowData.value.id)
-    if (error) throw error
-  } catch (error) {
-    if (error instanceof Error) {
-      alert(error.message)
+    if (errorData) {
+      throw new Error(errorData.message)
     }
-  } finally {
     emits('dataFromServer')
     toggleModal.value = false
     $q.notify({
       position: 'top',
       message: i18n.t('editDataMsg'),
       color: 'primary',
-      type: 'positive',
+      icon: 'thumb_up',
+      progress: true,
+      timeout: 1500
+    })
+  } catch (error) {
+    $q.notify({
+      position: 'top',
+      message: error.message,
+      color: 'negative',
+      icon: 'report_problem',
       progress: true,
       timeout: 1500
     })
