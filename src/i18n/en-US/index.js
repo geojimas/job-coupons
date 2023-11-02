@@ -4,7 +4,7 @@ export default {
   login: 'Login',
   logout: 'logout',
   profile: 'profile',
-  exportToCSV: 'export To Xcel',
+  exportToCSV: 'export To Excel',
   staffTable: 'Staff Table',
   Columns: 'Columns',
   Search: 'Search..',

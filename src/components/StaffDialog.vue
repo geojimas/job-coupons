@@ -6,6 +6,7 @@
       class="q-mr-lg"
       color="secondary"
       icon="person_add"
+      no-caps
       push />
     <q-dialog persistent v-model="toggleModal">
       <q-card-section style="max-height: 65vh" class="bg-white">
@@ -124,21 +125,19 @@
                 outlined
                 autocomplete="off"
                 :name="`'${value}'`"
-                style="width: 89px"
+                :style="monthsInputClass"
                 color="secondary"
                 type="tel"
                 lazy-rules
-                :rules="[
-                  val => !val || /^-?\d+$/.test(val) || $t('validInteger2')
-                ]"
+                :rules="[val => !val || /^-?\d+$/.test(val) || $t('validInteger2')]"
                 :disable="formData.coupon_rights === false"
                 v-model="numOfCoupons[index]"
                 :label="$t(months[index])" />
             </div>
           </div>
           <div style="display: flex; justify-content: end" class="q-pa-sm">
-            <q-btn class="q-mr-sm" flat :label="`${$t('cancel')}`" v-close-popup />
-            <q-btn type="submit" color="secondary" push :label="`${$t('save')}`" />
+            <q-btn class="q-mr-sm" flat :label="`${$t('cancel')}`" no-caps v-close-popup />
+            <q-btn type="submit" color="secondary" push no-caps :label="`${$t('save')}`" />
           </div>
         </q-form>
       </q-card-section>
@@ -170,6 +169,9 @@ const formData = ref({
   coupon_rights: false,
   contract_term: null
 })
+const monthsInputClass = computed(() => {
+  return $q.screen.lt.md ? 'width: 85px' : 'width: 110px'
+})
 const numOfCoupons = ref(['', '', '', '', '', '', '', '', '', '', '', ''])
 const months = ref([
   Constants.january,
@@ -200,7 +202,8 @@ const openModal = payload => {
     for (let index = 0; index < numOfCoupons.value.length; index++) {
       const monthKey = Constants[months.value[index].toLowerCase()]
       if (currentItemRowData.value[monthKey] !== null) {
-        numOfCoupons.value[index] = currentItemRowData.value[monthKey]
+        numOfCoupons.value[index] =
+          currentItemRowData.value[monthKey] === 0 ? '' : currentItemRowData.value[monthKey]
       }
     }
   } else {
@@ -293,12 +296,12 @@ const HandleUpdateRequest = async () => {
     coupon_rights: formData.value.coupon_rights
   }
 
-  // fill moths data with values TO SENT
-  for (let index = 0; index < months.value.length; index++) {
-    sentData.value[months.value[index]] = numOfCoupons.value[index]
-    // Check if need the coupons are disabled and it has forgotten values
-    if (formData.value.coupon_rights === false && numOfCoupons.value[index] !== 0)
-      sentData.value[months.value[index]] = 0
+    // fill moths data with values
+    for (let index = 0; index < months.value.length; index++) {
+    sentData.value[months.value[index]] =
+      formData.value.coupon_rights === false || numOfCoupons.value[index] === ''
+        ? 0
+        : parseInt(numOfCoupons.value[index])
   }
 
   try {

@@ -1,5 +1,5 @@
 <template>
-  <q-card class="relative-position" bordered>
+  <q-card class="relative-position card-animation" bordered>
     <q-card-section>
       <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
         <VueApexCharts
@@ -95,3 +95,15 @@ const series = computed(() => {
   ]
 })
 </script>
+
+<style lang="scss" scoped>
+.card-animation {
+  opacity: 65%;
+  cursor: pointer;
+}
+
+.card-animation:hover {
+  opacity: 100%;
+  transition: opacity 1s;
+}
+</style>

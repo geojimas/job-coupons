@@ -70,20 +70,22 @@
               @click="handleDeleteRequest(props.row)"></q-btn>
           </div>
         </q-tr>
-        <q-tr v-show="props.expand" :props="props">
-          <q-td class="bg-teal-1 rounded-borders" colspan="100%">
-            <q-item>
-              <q-item-section v-for="month in months" :key="month">
-                <q-item-label class="flex justify-center text-bold q-mx-sm">{{
-                  $t(`${month}`)
-                }}</q-item-label>
-                <q-item-label class="flex justify-center text-bold text-red">{{
-                  props.row[month.toLowerCase()]
-                }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-td>
-        </q-tr>
+        <Transition>
+          <q-tr v-show="props.expand" :props="props">
+            <q-td class="bg-teal-1 rounded-borders" colspan="100%">
+              <q-item>
+                <q-item-section v-for="month in months" :key="month">
+                  <q-item-label class="flex justify-center text-bold q-mx-sm">{{
+                    $t(`${month}`)
+                  }}</q-item-label>
+                  <q-item-label class="flex justify-center text-bold text-red">{{
+                    props.row[month.toLowerCase()]
+                  }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-td>
+          </q-tr>
+        </Transition>
       </template>
     </q-table>
   </div>
@@ -131,7 +133,7 @@ const dataForExport = computed(() => {
 })
 const filter = ref('')
 const $q = useQuasar()
-const separator = ref('horizontal')
+const separator = ref('cell')
 const i18n = useI18n()
 const pagination = ref({
   sortBy: 'name',
@@ -404,3 +406,17 @@ const secondColumns = computed(() => [
   }
 ])
 </script>
+
+<style lang="scss" scoped>
+.v-enter-active{
+  animation: fadeIn 1.5s;
+}
+.v-leave-active {
+  animation: fadeOut 0.15s;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>

@@ -49,7 +49,10 @@ const numberOfPeopleWithoutCouponRightsValue = ref(0)
 
 const getDataFromServer = async () => {
   try {
-    let { data, error } = await supabase.from('staff').select('*')
+    let { data, error: errorData } = await supabase.from('staff').select('*')
+    if (errorData) {
+        throw new Error(errorData.message)
+      }
     dataFromServer.value = data
     loadingState.value = false
     numberOfPeopleWithCouponRightsValue.value = dataFromServer.value.filter(
@@ -62,11 +65,15 @@ const getDataFromServer = async () => {
       (numberOfPeopleWithCouponRights.value / data.length) *
       100
     ).toFixed(2)
-    if (error) throw error
   } catch (error) {
-    if (error instanceof Error) {
-      alert(error.message)
-    }
+    $q.notify({
+        position: 'top',
+        message: error.message,
+        color: 'negative',
+        icon: 'report_problem',
+        progress: true,
+        timeout: 1500
+      })
   }
 }
 </script>
