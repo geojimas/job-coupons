@@ -1,21 +1,21 @@
 <template>
-  <div class="q-pa-xl">
+  <div class="q-pa-md">
     <q-table
       :title="`${$t('staffTable')}`"
       :rows="props.dataFromServer"
       :columns="columns"
       :loading="props.loadingState"
       :pagination.sync="pagination"
+      :separator="separator"
       :filter="filter"
       no-data
-      :rows-per-page-label="`${$t('rowsPerPage')}`"
       :no-data-label="`${$t('serverNotFound')}`"
+      :rows-per-page-label="`${$t('rowsPerPage')}`"
       dense
       flat
       bordered
-      color="secondary"
-      class="animate__animated animate__fadeIn"
-      row-key="id">
+      row-key="id"
+      class="animate__animated animate__fadeIn">
       <template v-slot:top-right="props">
         <StaffDialog ref="staffDialogRef" @dataFromServer="getDataFromServerParent" />
         <q-input
@@ -41,22 +41,49 @@
           @click="props.toggleFullscreen"
           class="q-ml-sm" />
       </template>
-      <template v-slot:body-cell-actions="props">
-        <q-td :props="props">
-          <q-btn
-            color="secondary"
-            class="q-mr-sm"
-            flat
-            debounce="300"
-            icon="mode_edit"
-            @click="callChildOpenModalMethod(props.row)"></q-btn>
-          <q-btn
-            color="negative"
-            debounce="300"
-            flat
-            icon="delete"
-            @click="handleDeleteRequest(props.row)"></q-btn>
-        </q-td>
+      <template v-slot:body="props">
+        <q-tr :props="props">
+          <q-td auto-width>
+            <q-btn
+              size="md"
+              dense
+              rounded
+              :color="props.expand ? 'negative' : 'teal'"
+              @click="props.expand = !props.expand"
+              :icon="props.expand ? 'expand_less' : 'expand_more'" />
+          </q-td>
+          <q-td v-for="col in props.cols" :key="col.name" :props="props">
+            {{ col.value }}
+          </q-td>
+          <div style="display: flex; justify-content: center; flex-wrap: nowrap">
+            <q-btn
+              color="secondary"
+              flat
+              debounce="300"
+              icon="mode_edit"
+              @click="callChildOpenModalMethod(props.row)"></q-btn>
+            <q-btn
+              color="negative"
+              debounce="300"
+              flat
+              icon="delete"
+              @click="handleDeleteRequest(props.row)"></q-btn>
+          </div>
+        </q-tr>
+        <q-tr v-show="props.expand" :props="props">
+          <q-td class="bg-teal-1 rounded-borders" colspan="100%">
+            <q-item>
+              <q-item-section v-for="month in months" :key="month">
+                <q-item-label class="flex justify-center text-bold q-mx-sm">{{
+                  $t(`${month}`)
+                }}</q-item-label>
+                <q-item-label class="flex justify-center text-bold text-red">{{
+                  props.row[month.toLowerCase()]
+                }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-td>
+        </q-tr>
       </template>
     </q-table>
   </div>
@@ -67,6 +94,7 @@ import { exportFile, useQuasar } from 'quasar'
 import { ref, computed } from 'vue'
 import { supabase } from '../boot/supabase'
 import { useI18n } from 'vue-i18n'
+import Constants from 'src/constants/index'
 import StaffDialog from '../components/StaffDialog.vue'
 import dayjs from 'dayjs'
 
@@ -82,6 +110,20 @@ const props = defineProps({
     required: true
   }
 })
+const months = ref([
+  Constants.january,
+  Constants.february,
+  Constants.march,
+  Constants.april,
+  Constants.may,
+  Constants.june,
+  Constants.july,
+  Constants.august,
+  Constants.september,
+  Constants.october,
+  Constants.november,
+  Constants.december
+])
 
 const staffDialogRef = ref(null)
 const dataForExport = computed(() => {
@@ -89,6 +131,7 @@ const dataForExport = computed(() => {
 })
 const filter = ref('')
 const $q = useQuasar()
+const separator = ref('horizontal')
 const i18n = useI18n()
 const pagination = ref({
   sortBy: 'name',
@@ -169,8 +212,7 @@ function wrapCsvValue(val, formatFn, row) {
 
 function exportTable() {
   // Copy the columns array and exclude the last column
-  const columnsToExport = [...columns.value]
-  columnsToExport.pop() // Remove the last column
+  const columnsToExport = [...columns.value, ...secondColumns.value]
 
   // Naive encoding to csv format
   const content = [columnsToExport.map(col => wrapCsvValue(col.label))]
@@ -203,6 +245,7 @@ function exportTable() {
 }
 
 const columns = computed(() => [
+  {},
   {
     name: 'name',
     label: i18n.t('username'),
@@ -252,6 +295,17 @@ const columns = computed(() => [
     format: val => `${val}`,
     sortable: true
   },
+  {
+    name: 'total_coupons',
+    label: i18n.t('totalCoupons'),
+    align: 'center',
+    field: row => row.total_coupons,
+    format: val => `${val}`,
+    sortable: true
+  }
+])
+
+const secondColumns = computed(() => [
   {
     name: 'january',
     label: i18n.t('january'),
@@ -347,19 +401,6 @@ const columns = computed(() => [
     field: row => (row.december === 0 ? '' : row.december),
     format: val => `${val}`,
     sortable: true
-  },
-  {
-    name: 'total_coupons',
-    label: i18n.t('totalCoupons'),
-    align: 'center',
-    field: row => row.total_coupons,
-    format: val => `${val}`,
-    sortable: true
-  },
-  {
-    name: 'actions',
-    align: 'center',
-    label: i18n.t('actions')
   }
 ])
 </script>

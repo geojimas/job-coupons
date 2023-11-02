@@ -124,9 +124,13 @@
                 outlined
                 autocomplete="off"
                 :name="`'${value}'`"
-                style="width: 86px"
+                style="width: 89px"
                 color="secondary"
                 type="tel"
+                lazy-rules
+                :rules="[
+                  val => !val || /^-?\d+$/.test(val) || $t('validInteger2')
+                ]"
                 :disable="formData.coupon_rights === false"
                 v-model="numOfCoupons[index]"
                 :label="$t(months[index])" />
@@ -166,7 +170,7 @@ const formData = ref({
   coupon_rights: false,
   contract_term: null
 })
-const numOfCoupons = ref([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+const numOfCoupons = ref(['', '', '', '', '', '', '', '', '', '', '', ''])
 const months = ref([
   Constants.january,
   Constants.february,
@@ -226,7 +230,7 @@ watch(toggleModal, newToggleModal => {
 
     // fill moths data with values
     for (let index = 0; index < months.value.length; index++) {
-      numOfCoupons.value[index] = 0
+      numOfCoupons.value[index] = ''
     }
   }
 })
@@ -244,10 +248,14 @@ const HandleSubmitRequest = async () => {
 
   // fill moths data with values
   for (let index = 0; index < months.value.length; index++) {
-    sentData.value[months.value[index]] = numOfCoupons.value[index]
+    sentData.value[months.value[index]] =
+      formData.value.coupon_rights === false || numOfCoupons.value[index] === ''
+        ? 0
+        : parseInt(numOfCoupons.value[index])
   }
 
   try {
+    console.log(sentData.value)
     const { error: errorData } = await supabase.from('staff').insert(sentData.value)
     if (errorData) {
       throw new Error(errorData.message)

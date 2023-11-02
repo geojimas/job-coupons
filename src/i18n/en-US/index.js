@@ -40,6 +40,8 @@ export default {
   validPhone1: 'Use maximum 10 characters',
   validPhone2: 'Use only Numbers',
   validDate: 'Select a valid Date',
+  validInteger1: 'Maximum 2 numbers',
+  validInteger2: 'Select integer numbers',
   postDataMsg: 'successfully Created',
   editDataMsg: 'successfully Edited',
   deleteConf: 'Are you sure you want to delete this ?',
