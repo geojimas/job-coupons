@@ -37,14 +37,16 @@ export default route(function (/* { store, ssrContext } */) {
   // Global Route Guard
   Router.beforeEach((to, _from, next) => {
     const store = useUserStore()
-    if (to.matched.some(record => record.meta.requireAuth)) {
-      if (store.isAuthenticated) {
-        next()
-      } else {
-        next('/login')
-      }
+    if (to.path === '/login' && store.isAuthenticated) {
+      // If the user is already authenticated and trying to access the login page,
+      // redirect to a different route (e.g., home)
+      next('/');
+    } else if (to.matched.some(record => record.meta.requireAuth) && !store.isAuthenticated) {
+      // User is not authenticated and trying to access a route that requires authentication
+      next('/login');
     } else {
-      next()
+      // For other routes, allow navigation
+      next();
     }
   })
 
