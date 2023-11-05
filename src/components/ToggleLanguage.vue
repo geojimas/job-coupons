@@ -3,9 +3,7 @@
     <q-btn-toggle
       v-model="changeLanguage"
       class="q-mr-md"
-      no-caps
       rounded
-      unelevated
       toggle-color="secondary"
       color="dark"
       text-color="white"

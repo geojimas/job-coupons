@@ -6,7 +6,7 @@
       :rows="props.dataFromServer"
       :columns="mainlyColumns"
       :loading="props.loadingState"
-      :pagination.sync="pagination"
+      :pagination="pagination"
       :separator="separator"
       :filter="filter"
       no-data
@@ -16,15 +16,15 @@
       row-key="id"
       table-class="animate__animated animate__fadeIn">
       <template v-slot:loading>
-        <q-inner-loading showing color="teal" />
+        <q-inner-loading showing color="secondary" />
       </template>
       <template v-slot:header-cell-name="props">
         <q-th :props="props">
           <q-icon
             class="q-mr-sm"
-            color="teal"
+            color="secondary"
             name="settings_accessibility"
-            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
@@ -32,9 +32,9 @@
         <q-th :props="props">
           <q-icon
             class="q-mr-sm"
-            color="teal"
+            color="secondary"
             name="badge"
-            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
@@ -42,9 +42,9 @@
         <q-th :props="props">
           <q-icon
             class="q-mr-sm"
-            color="teal"
+            color="secondary"
             name="alternate_email"
-            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
@@ -52,9 +52,9 @@
         <q-th :props="props">
           <q-icon
             class="q-mr-sm"
-            color="teal"
+            color="secondary"
             name="call"
-            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
@@ -62,9 +62,9 @@
         <q-th :props="props">
           <q-icon
             class="q-mr-sm"
-            color="teal"
+            color="secondary"
             name="event"
-            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
@@ -72,9 +72,9 @@
         <q-th :props="props">
           <q-icon
             class="q-mr-sm"
-            color="teal"
+            color="secondary"
             name="card_membership"
-            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
@@ -82,17 +82,16 @@
         <q-th :props="props">
           <q-icon
             class="q-mr-sm"
-            color="teal"
+            color="secondary"
             name="all_out"
-            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
       <template v-slot:top-right="props">
         <StaffDialog ref="staffDialogRef" @dataFromServer="getDataFromServerParent" />
         <q-input
-          :class="$q.screen.lt.md ? 'q-ma-md' : 'q-mr-lg'"
-          :style="$q.screen.lt.md ? 'font-size: 13px' : 'font-size: 17px'"
+          :class="$q.screen.lt.md ? 'q-ma-md text-bold' : 'q-mr-lg text-bold'"
           dense
           color="secondary"
           debounce="300"
@@ -105,16 +104,15 @@
         <q-btn
           color="secondary"
           icon-right="archive"
-          class="q-mr-lg"
-          :style="$q.screen.lt.md ? 'font-size: 13px; font-weight: bold' : 'font-size: 17px; font-weight: bold'"
+          class="q-mr-lg text-bold"
           :label="`${$t('exportToCSV')}`"
           no-caps
           @click="exportTable" />
         <q-btn
           round
           class="q-mr-lg"
-          :style="$q.screen.lt.md ? 'font-size: 13px; font-weight: bold' : 'font-size: 17px; font-weight: bold'"
-          :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+          color="secondary"
+          :icon="props.inFullscreen ? 'close_fullscreen' : 'fullscreen'"
           @click="props.toggleFullscreen" />
       </template>
       <template v-slot:body="props">
@@ -133,17 +131,17 @@
           </q-td>
           <div style="display: flex; justify-content: center; flex-wrap: nowrap">
             <q-btn
-              color="secondary"
-              flat
+              color="dark"
+              rounded
+              class="q-ma-sm"
               debounce="300"
-              size="18px"
               icon="mode_edit"
               @click="callChildOpenModalMethod(props.row)"></q-btn>
             <q-btn
               color="negative"
-              flat
+              class="q-ma-sm"
+              rounded
               debounce="300"
-              size="18px"
               icon="delete"
               @click="handleDeleteRequest(props.row)"></q-btn>
           </div>
@@ -153,15 +151,12 @@
             <q-td class="bg-teal-1 rounded-borders" colspan="100%">
               <q-item>
                 <q-item-section v-for="month in months" :key="month">
-                  <q-item-label
-                    style="font-size: 14px"
-                    class="flex justify-center text-bold q-mx-sm"
-                    >{{ $t(`${month}`) }}</q-item-label
-                  >
+                  <q-item-label class="flex justify-center q-mx-sm">{{
+                    $t(`${month}`)
+                  }}</q-item-label>
                   <q-item-label class="flex justify-center">
                     <q-badge
                       class="text-bold"
-                      style="font-size: 13px"
                       :color="props.row[month] === 0 ? 'negative' : 'green'">
                       {{ props.row[month] }}
                     </q-badge></q-item-label
@@ -331,9 +326,9 @@ function exportTable() {
   }
 }
 
-const columnFontStyle = ref($q.screen.lt.xl ? 'font-size: 12px' : 'font-size: 17px')
+const columnFontStyle = ref($q.screen.lt.xl ? 'font-size: 12px' : 'font-size: 15px')
 const headerColumnFontStyle = ref(
-  $q.screen.lt.xl ? 'font-size: 12px' : 'font-weight: bold; font-size: 17px'
+  $q.screen.lt.xl ? 'font-size: 12px' : 'font-weight: bold; font-size: 15px'
 )
 
 const mainlyColumns = computed(() => [

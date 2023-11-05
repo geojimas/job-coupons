@@ -2,8 +2,11 @@
   <q-layout>
     <q-header reveal elevated class="bg-dark text-white">
       <q-toolbar>
-        <img src="../assets/tickets.png" width="60" alt="coupons">
-        <q-toolbar-title class="text-h5 text-bold">{{ $t('coupons') }}</q-toolbar-title>
+        <img src="../assets/tickets.png" width="60" alt="coupons" />
+        <q-toolbar-title v-if="$q.screen.gt.xs" class="text-bold">{{
+          $t('coupons')
+        }}</q-toolbar-title>
+        <q-toolbar-title v-else />
         <ToggleLanguage />
         <DropDownButton v-if="isUserAuth" />
       </q-toolbar>

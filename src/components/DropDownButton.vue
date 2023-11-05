@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-btn-dropdown color="secondary" icon="manage_accounts">
+    <q-btn-dropdown glossy push color="secondary" icon="manage_accounts">
       <div class="row no-wrap q-pa-sm">
         <!-- <div class="column">
           <div class="text-h6 q-mb-md">Connected as: </div>
@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useUserStore } from '../stores/userStore'
 
 const store = useUserStore()
@@ -32,10 +32,6 @@ const currentUser = computed(() => {
   return store.user.email
 })
 const handleLogout = () => {
-  try {
-    store.logoutUser()
-  } catch (error) {
-    alert(error)
-  }
+  store.logoutUser()
 }
 </script>

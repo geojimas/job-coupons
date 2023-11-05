@@ -4,7 +4,7 @@
       <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
         <VueApexCharts
           class="animate__animated animate__fadeIn"
-          width="400"
+          width="370"
           type="donut"
           :options="options"
           :series="series"></VueApexCharts>
@@ -45,6 +45,43 @@ const options = computed(() => {
     chart: {
       id: 'apex-donut'
     },
+    dataLabels: {
+      enabled: true,
+      textAnchor: 'middle',
+      distributed: false,
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+        fontSize: '14px',
+        fontWeight: 'bold',
+        colors: undefined
+      },
+      background: {
+        enabled: true,
+        foreColor: '#fff',
+        padding: 4,
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: '#fff',
+        opacity: 0.9,
+        dropShadow: {
+          enabled: false,
+          top: 1,
+          left: 1,
+          blur: 1,
+          color: '#000',
+          opacity: 0.45
+        }
+      },
+      dropShadow: {
+        enabled: false,
+        top: 1,
+        left: 1,
+        blur: 1,
+        color: '#000',
+        opacity: 0.45
+      }
+    },
     colors: [getCssVar('primary'), getCssVar('negative')],
     markers: {
       size: 4,
@@ -84,12 +121,10 @@ const series = computed(() => {
 
 <style lang="scss" scoped>
 .card-animation {
-  opacity: 65%;
   cursor: pointer;
-}
-
-.card-animation:hover {
-  opacity: 100%;
-  transition: opacity 1s;
+  &:hover {
+    box-shadow: 0 26px 58px 0 rgba(0, 0, 0, 0.22), 0 5px 14px 0 $secondary;
+    transition: box-shadow 0.3s;
+  }
 }
 </style>
