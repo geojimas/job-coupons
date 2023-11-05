@@ -3,7 +3,7 @@
     <q-table
       :title="`${$t('staffTable')}`"
       :rows="props.dataFromServer"
-      :columns="columns"
+      :columns="mainlyColumns"
       :loading="props.loadingState"
       :pagination.sync="pagination"
       :separator="separator"
@@ -11,15 +11,86 @@
       no-data
       :no-data-label="`${$t('serverNotFound')}`"
       :rows-per-page-label="`${$t('rowsPerPage')}`"
-      dense
-      flat
-      bordered
+      :dense="$q.screen.lt.xl"
       row-key="id"
-      class="animate__animated animate__fadeIn">
+      table-class="animate__animated animate__fadeIn">
+      <template v-slot:loading>
+        <q-inner-loading showing color="teal" />
+      </template>
+      <template v-slot:header-cell-name="props">
+        <q-th :props="props">
+          <q-icon
+            class="q-mr-sm"
+            color="teal"
+            name="settings_accessibility"
+            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      <template v-slot:header-cell-surname="props">
+        <q-th :props="props">
+          <q-icon
+            class="q-mr-sm"
+            color="teal"
+            name="badge"
+            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      <template v-slot:header-cell-email="props">
+        <q-th :props="props">
+          <q-icon
+            class="q-mr-sm"
+            color="teal"
+            name="alternate_email"
+            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      <template v-slot:header-cell-phone="props">
+        <q-th :props="props">
+          <q-icon
+            class="q-mr-sm"
+            color="teal"
+            name="call"
+            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      <template v-slot:header-cell-contract_term="props">
+        <q-th :props="props">
+          <q-icon
+            class="q-mr-sm"
+            color="teal"
+            name="event"
+            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      <template v-slot:header-cell-coupon_rights="props">
+        <q-th :props="props">
+          <q-icon
+            class="q-mr-sm"
+            color="teal"
+            name="card_membership"
+            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      <template v-slot:header-cell-total_coupons="props">
+        <q-th :props="props">
+          <q-icon
+            class="q-mr-sm"
+            color="teal"
+            name="all_out"
+            :size="$q.screen.lt.xl ? '1.3em' : '1.5em'" />
+          {{ props.col.label }}
+        </q-th>
+      </template>
       <template v-slot:top-right="props">
         <StaffDialog ref="staffDialogRef" @dataFromServer="getDataFromServerParent" />
         <q-input
-          class="q-mr-md"
+          :class="$q.screen.lt.md ? 'q-ma-md' : 'q-mr-lg'"
           dense
           color="secondary"
           debounce="300"
@@ -32,14 +103,14 @@
         <q-btn
           color="secondary"
           icon-right="archive"
+          class="q-mr-lg"
           :label="`${$t('exportToCSV')}`"
           no-caps
           @click="exportTable" />
         <q-btn
           round
           :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-          @click="props.toggleFullscreen"
-          class="q-ml-sm" />
+          @click="props.toggleFullscreen" />
       </template>
       <template v-slot:body="props">
         <q-tr :props="props">
@@ -60,12 +131,14 @@
               color="secondary"
               flat
               debounce="300"
+              size="18px"
               icon="mode_edit"
               @click="callChildOpenModalMethod(props.row)"></q-btn>
             <q-btn
               color="negative"
-              debounce="300"
               flat
+              debounce="300"
+              size="18px"
               icon="delete"
               @click="handleDeleteRequest(props.row)"></q-btn>
           </div>
@@ -75,12 +148,19 @@
             <q-td class="bg-teal-1 rounded-borders" colspan="100%">
               <q-item>
                 <q-item-section v-for="month in months" :key="month">
-                  <q-item-label class="flex justify-center text-bold q-mx-sm">{{
-                    $t(`${month}`)
-                  }}</q-item-label>
-                  <q-item-label class="flex justify-center text-bold text-red">{{
-                    props.row[month.toLowerCase()]
-                  }}</q-item-label>
+                  <q-item-label
+                    style="font-size: 14px"
+                    class="flex justify-center text-bold q-mx-sm"
+                    >{{ $t(`${month}`) }}</q-item-label
+                  >
+                  <q-item-label class="flex justify-center">
+                    <q-badge
+                      class="text-bold"
+                      style="font-size: 13px"
+                      :color="props.row[month] === 0 ? 'negative' : 'green'">
+                      {{ props.row[month] }}
+                    </q-badge></q-item-label
+                  >
                 </q-item-section>
               </q-item>
             </q-td>
@@ -214,7 +294,7 @@ function wrapCsvValue(val, formatFn, row) {
 
 function exportTable() {
   // Copy the columns array and exclude the last column
-  const columnsToExport = [...columns.value, ...secondColumns.value]
+  const columnsToExport = [...mainlyColumns.value, ...secondaryColumns.value]
 
   // Naive encoding to csv format
   const content = [columnsToExport.map(col => wrapCsvValue(col.label))]
@@ -246,7 +326,12 @@ function exportTable() {
   }
 }
 
-const columns = computed(() => [
+const columnFontStyle = ref($q.screen.lt.xl ? 'font-size: 12px' : 'font-size: 17px')
+const headerColumnFontStyle = ref(
+  $q.screen.lt.xl ? 'font-size: 12px' : 'font-weight: bold; font-size: 17px'
+)
+
+const mainlyColumns = computed(() => [
   {},
   {
     name: 'name',
@@ -254,7 +339,9 @@ const columns = computed(() => [
     align: 'center',
     field: row => row.name,
     format: val => `${val}`,
-    sortable: true
+    sortable: true,
+    headerStyle: headerColumnFontStyle.value,
+    style: columnFontStyle.value
   },
   {
     name: 'surname',
@@ -262,7 +349,9 @@ const columns = computed(() => [
     align: 'center',
     field: row => row.surname,
     format: val => `${val}`,
-    sortable: true
+    sortable: true,
+    headerStyle: headerColumnFontStyle.value,
+    style: columnFontStyle.value
   },
   {
     name: 'email',
@@ -270,7 +359,9 @@ const columns = computed(() => [
     align: 'center',
     field: row => row.email,
     format: val => `${val}`,
-    sortable: true
+    sortable: true,
+    headerStyle: headerColumnFontStyle.value,
+    style: columnFontStyle.value
   },
 
   {
@@ -279,7 +370,9 @@ const columns = computed(() => [
     align: 'center',
     field: row => row.phone,
     format: val => `${val}`,
-    sortable: true
+    sortable: true,
+    headerStyle: headerColumnFontStyle.value,
+    style: columnFontStyle.value
   },
   {
     name: 'contract_term',
@@ -287,7 +380,9 @@ const columns = computed(() => [
     align: 'center',
     field: row => (row.contract_term ? dayjs(row.contract_term).format('DD/MM/YYYY') : ''),
     format: val => `${val}`,
-    sortable: true
+    sortable: true,
+    headerStyle: headerColumnFontStyle.value,
+    style: columnFontStyle.value
   },
   {
     name: 'coupon_rights',
@@ -295,7 +390,9 @@ const columns = computed(() => [
     align: 'center',
     field: row => (row.coupon_rights === false ? i18n.t('no') : i18n.t('yes')),
     format: val => `${val}`,
-    sortable: true
+    sortable: true,
+    headerStyle: headerColumnFontStyle.value,
+    style: columnFontStyle.value
   },
   {
     name: 'total_coupons',
@@ -303,11 +400,13 @@ const columns = computed(() => [
     align: 'center',
     field: row => row.total_coupons,
     format: val => `${val}`,
-    sortable: true
+    sortable: true,
+    headerStyle: headerColumnFontStyle.value,
+    style: columnFontStyle.value
   }
 ])
 
-const secondColumns = computed(() => [
+const secondaryColumns = computed(() => [
   {
     name: 'january',
     label: i18n.t('january'),
@@ -408,7 +507,7 @@ const secondColumns = computed(() => [
 </script>
 
 <style lang="scss" scoped>
-.v-enter-active{
+.v-enter-active {
   animation: fadeIn 1.5s;
 }
 .v-leave-active {

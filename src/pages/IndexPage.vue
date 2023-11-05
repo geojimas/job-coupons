@@ -51,29 +51,30 @@ const getDataFromServer = async () => {
   try {
     let { data, error: errorData } = await supabase.from('staff').select('*')
     if (errorData) {
-        throw new Error(errorData.message)
-      }
-    dataFromServer.value = data
-    loadingState.value = false
-    numberOfPeopleWithCouponRightsValue.value = dataFromServer.value.filter(
-      person => person.coupon_rights
-    ).length
-    numberOfPeopleWithoutCouponRightsValue.value = dataFromServer.value.filter(
-      person => !person.coupon_rights
-    ).length
-    percentagePeopleWithCouponRights.value = (
-      (numberOfPeopleWithCouponRights.value / data.length) *
-      100
-    ).toFixed(2)
+      throw new Error(errorData.message)
+    } else {
+      dataFromServer.value = data
+      loadingState.value = false
+      numberOfPeopleWithCouponRightsValue.value = dataFromServer.value.filter(
+        person => person.coupon_rights
+      ).length
+      numberOfPeopleWithoutCouponRightsValue.value = dataFromServer.value.filter(
+        person => !person.coupon_rights
+      ).length
+      percentagePeopleWithCouponRights.value = (
+        (numberOfPeopleWithCouponRights.value / data.length) *
+        100
+      ).toFixed(2)
+    }
   } catch (error) {
     $q.notify({
-        position: 'top',
-        message: error.message,
-        color: 'negative',
-        icon: 'report_problem',
-        progress: true,
-        timeout: 1500
-      })
+      position: 'top',
+      message: error.message,
+      color: 'negative',
+      icon: 'report_problem',
+      progress: true,
+      timeout: 1500
+    })
   }
 }
 </script>
