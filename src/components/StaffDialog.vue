@@ -22,11 +22,12 @@
             <div class="col q-ma-sm">
               <q-input
                 outlined
+                clearable
+                maxlength="30"
                 autocomplete="off"
                 name="name"
                 style="max-width: 220px"
                 color="secondary"
-                lazy-rules
                 :rules="[
                   val => (val && val.length > 0) || `${$t('nameValidation1')}`,
                   val => (val && val.length >= 3) || `${$t('nameValidation2')}`
@@ -38,11 +39,12 @@
             <div class="col q-ma-sm">
               <q-input
                 outlined
+                clearable
                 autocomplete="off"
+                maxlength="30"
                 name="surname"
                 style="max-width: 220px"
                 color="secondary"
-                lazy-rules
                 :rules="[
                   val => (val && val.length > 0) || `${$t('surnameValidation1')}`,
                   val => (val && val.length >= 3) || `${$t('surnameValidation2')}`
@@ -56,12 +58,13 @@
             <div class="col q-ma-sm">
               <q-input
                 outlined
+                clearable
                 name="email"
+                maxlength="45"
                 autocomplete="off"
                 style="max-width: 220px"
                 color="secondary"
                 type="email"
-                lazy-rules
                 :rules="[(val, rules) => rules.email(val) || `${$t('validEmail')}`]"
                 v-model="formData.email"
                 :label="`${$t('email')}`" />
@@ -69,12 +72,13 @@
             <div class="col q-ma-sm">
               <q-input
                 outlined
+                clearable
                 name="phone"
                 autocomplete="off"
+                maxlength="10"
                 style="max-width: 220px"
                 color="secondary"
                 type="tel"
-                lazy-rules
                 :rules="[
                   val => val.length <= 10 || $t('validPhone1'),
                   val => !val || /^\d+$/.test(val) || $t('validPhone2')
@@ -88,6 +92,7 @@
               <q-input
                 :label="`${$t('contractExp')}`"
                 outlined
+                clearable
                 autocomplete="off"
                 style="max-width: 220px"
                 name="contactTerm"
@@ -127,8 +132,8 @@
                 :name="`'${value}'`"
                 :style="monthsInputClass"
                 color="secondary"
+                maxlength="2"
                 type="tel"
-                lazy-rules
                 :rules="[val => !val || /^-?\d+$/.test(val) || $t('validInteger2')]"
                 :disable="formData.coupon_rights === false"
                 v-model="numOfCoupons[index]"
