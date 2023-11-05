@@ -4,6 +4,7 @@
       :label="`${$t('add')}`"
       @click="openModal()"
       class="q-mr-lg"
+      :style="$q.screen.lt.md ? 'font-size: 13px; font-weight: bold' : 'font-size: 17px; font-weight: bold'"
       color="secondary"
       icon="person_add"
       no-caps

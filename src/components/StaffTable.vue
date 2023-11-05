@@ -2,6 +2,7 @@
   <div class="q-pa-md">
     <q-table
       :title="`${$t('staffTable')}`"
+      title-class="text-h5 text-bold"
       :rows="props.dataFromServer"
       :columns="mainlyColumns"
       :loading="props.loadingState"
@@ -91,6 +92,7 @@
         <StaffDialog ref="staffDialogRef" @dataFromServer="getDataFromServerParent" />
         <q-input
           :class="$q.screen.lt.md ? 'q-ma-md' : 'q-mr-lg'"
+          :style="$q.screen.lt.md ? 'font-size: 13px' : 'font-size: 17px'"
           dense
           color="secondary"
           debounce="300"
@@ -104,11 +106,14 @@
           color="secondary"
           icon-right="archive"
           class="q-mr-lg"
+          :style="$q.screen.lt.md ? 'font-size: 13px; font-weight: bold' : 'font-size: 17px; font-weight: bold'"
           :label="`${$t('exportToCSV')}`"
           no-caps
           @click="exportTable" />
         <q-btn
           round
+          class="q-mr-lg"
+          :style="$q.screen.lt.md ? 'font-size: 13px; font-weight: bold' : 'font-size: 17px; font-weight: bold'"
           :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
           @click="props.toggleFullscreen" />
       </template>
