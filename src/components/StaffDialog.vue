@@ -153,7 +153,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { ref, watch, computed } from 'vue'
-import { supabase } from '../boot/supabase'
+import { supabase } from 'boot/supabase'
 import { useI18n } from 'vue-i18n'
 import Constants from 'src/constants/index'
 

@@ -14,7 +14,7 @@ export default {
   surname: 'Surname',
   email: 'Email',
   phone: 'Phone',
-  contractExp: 'Contract Expiration Date',
+  contractExp: 'Contract Expiration',
   couponsRights: 'Coupons Rights',
   january: 'January',
   february: 'February',
@@ -58,5 +58,7 @@ export default {
   withCoupon: 'With Coupons',
   withoutCoupon: 'Without Coupons',
   rowsPerPage:'rows per Page',
-  connectedWith: 'Connected With :'
+  connectedWith: 'Connected With :',
+  notFound: 'Oops. Nothing here...',
+  ReturnHome: 'Go Home'
 }

@@ -14,7 +14,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import Constants from 'src/constants/index'
-import { useLanguageStore } from '../stores/languageStore'
+import { useLanguageStore } from 'stores/languageStore'
 
 const store = useLanguageStore()
 const selectedLang = ref(store.getAppLanguage)

@@ -1,165 +1,167 @@
 <template>
-  <div class="q-pa-md">
+  <div :class="$q.screen.lt.xl ? 'q-ma-sm' : 'q-ma-xl' ">
     <q-table
       :title="`${$t('staffTable')}`"
-      title-class="text-h5 text-bold"
-      :rows="props.dataFromServer"
-      :columns="mainlyColumns"
-      :loading="props.loadingState"
-      :pagination="pagination"
-      :separator="separator"
-      :filter="filter"
+      title-class='text-h5 text-bold'
+      :rows='props.dataFromServer'
+      :columns='mainlyColumns'
+      :loading='props.loadingState'
+      :pagination='pagination'
+      :separator='separator'
+      :filter='filter'
       no-data
       :no-data-label="`${$t('serverNotFound')}`"
       :rows-per-page-label="`${$t('rowsPerPage')}`"
-      :dense="$q.screen.lt.xl"
-      row-key="id"
-      table-class="animate__animated animate__fadeIn">
+      :dense='$q.screen.lt.xl'
+      row-key='id'
+      table-class='q-mx-sm animate__animated animate__fadeIn'>
       <template v-slot:loading>
-        <q-inner-loading showing color="secondary" />
+        <q-inner-loading showing color='secondary' />
       </template>
-      <template v-slot:header-cell-name="props">
-        <q-th :props="props">
+      <template v-slot:header-cell-name='props'>
+        <q-th :props='props'>
           <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="settings_accessibility"
+            class='q-mr-sm'
+            color='secondary'
+            name='settings_accessibility'
             :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
-      <template v-slot:header-cell-surname="props">
-        <q-th :props="props">
+      <template v-slot:header-cell-surname='props'>
+        <q-th :props='props'>
           <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="badge"
+            class='q-mr-sm'
+            color='secondary'
+            name='badge'
             :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
-      <template v-slot:header-cell-email="props">
-        <q-th :props="props">
+      <template v-slot:header-cell-email='props'>
+        <q-th :props='props'>
           <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="alternate_email"
+            class='q-mr-sm'
+            color='secondary'
+            name='alternate_email'
             :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
-      <template v-slot:header-cell-phone="props">
-        <q-th :props="props">
+      <template v-slot:header-cell-phone='props'>
+        <q-th :props='props'>
           <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="call"
+            class='q-mr-sm'
+            color='secondary'
+            name='call'
             :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
-      <template v-slot:header-cell-contract_term="props">
-        <q-th :props="props">
+      <template v-slot:header-cell-contract_term='props'>
+        <q-th :props='props'>
           <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="event"
+            class='q-mr-sm'
+            color='secondary'
+            name='event'
             :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
-      <template v-slot:header-cell-coupon_rights="props">
-        <q-th :props="props">
+      <template v-slot:header-cell-coupon_rights='props'>
+        <q-th :props='props'>
           <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="card_membership"
+            class='q-mr-sm'
+            color='secondary'
+            name='card_membership'
             :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
-      <template v-slot:header-cell-total_coupons="props">
-        <q-th :props="props">
+      <template v-slot:header-cell-total_coupons='props'>
+        <q-th :props='props'>
           <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="all_out"
+            class='q-mr-sm'
+            color='secondary'
+            name='all_out'
             :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
           {{ props.col.label }}
         </q-th>
       </template>
-      <template v-slot:top-right="props">
-        <StaffDialog ref="staffDialogRef" @dataFromServer="getDataFromServerParent" />
+      <template v-slot:top-right='props'>
+        <StaffDialog ref='staffDialogRef' @dataFromServer='getDataFromServerParent' />
         <q-input
           :class="$q.screen.lt.md ? 'q-ma-md text-bold' : 'q-mr-lg text-bold'"
           dense
-          color="secondary"
-          debounce="300"
-          v-model="filter"
+          color='secondary'
+          debounce='300'
+          v-model='filter'
           :placeholder="`${$t('Search')}`">
           <template v-slot:append>
-            <q-icon name="search" />
+            <q-icon name='search' />
           </template>
         </q-input>
         <q-btn
-          color="secondary"
-          icon-right="archive"
-          class="q-mr-lg text-bold"
+          color='secondary'
+          icon-right='archive'
+          class='q-mr-lg text-bold'
           :label="`${$t('exportToCSV')}`"
           no-caps
-          @click="exportTable" />
+          @click='exportTable' />
         <q-btn
           round
-          class="q-mr-lg"
-          color="secondary"
+          class='q-mr-lg'
+          color='secondary'
           :icon="props.inFullscreen ? 'close_fullscreen' : 'fullscreen'"
-          @click="props.toggleFullscreen" />
+          @click='props.toggleFullscreen' />
       </template>
-      <template v-slot:body="props">
-        <q-tr :props="props">
+      <template v-slot:body='props'>
+        <q-tr :props='props'>
           <q-td auto-width>
             <q-btn
-              size="md"
+              size='md'
               dense
               rounded
               :color="props.expand ? 'negative' : 'teal'"
-              @click="props.expand = !props.expand"
+              @click='props.expand = !props.expand'
               :icon="props.expand ? 'expand_less' : 'expand_more'" />
           </q-td>
-          <q-td v-for="col in props.cols" :key="col.name" :props="props">
+          <q-td v-for='col in props.cols' :key='col.name' :props='props'>
             {{ col.value }}
           </q-td>
-          <div style="display: flex; justify-content: center; flex-wrap: nowrap">
+          <div style='display: flex; justify-content: center; flex-wrap: nowrap'>
             <q-btn
-              color="dark"
+              color='dark'
               rounded
-              class="q-ma-sm"
-              debounce="300"
-              icon="mode_edit"
-              @click="callChildOpenModalMethod(props.row)"></q-btn>
+              class='q-ma-sm'
+              debounce='300'
+              icon='mode_edit'
+              @click='callChildOpenModalMethod(props.row)'></q-btn>
             <q-btn
-              color="negative"
-              class="q-ma-sm"
+              color='negative'
+              class='q-ma-sm'
               rounded
-              debounce="300"
-              icon="delete"
-              @click="handleDeleteRequest(props.row)"></q-btn>
+              debounce='300'
+              icon='delete'
+              @click='handleDeleteRequest(props.row)'></q-btn>
           </div>
         </q-tr>
         <Transition>
-          <q-tr v-show="props.expand" :props="props">
-            <q-td class="bg-teal-1 rounded-borders" colspan="100%">
+          <q-tr v-show='props.expand' :props='props'>
+            <q-td class='bg-teal-1 rounded-borders' colspan='100%'>
               <q-item>
-                <q-item-section v-for="month in months" :key="month">
-                  <q-item-label class="flex justify-center q-mx-sm">{{
-                    $t(`${month}`)
-                  }}</q-item-label>
-                  <q-item-label class="flex justify-center">
+                <q-item-section v-for='month in months' :key='month'>
+                  <q-item-label class='flex justify-center q-mx-sm'>{{
+                      $t(`${month}`)
+                    }}
+                  </q-item-label>
+                  <q-item-label class='flex justify-center'>
                     <q-badge
-                      class="text-bold"
+                      class='text-bold'
                       :color="props.row[month] === 0 ? 'negative' : 'green'">
                       {{ props.row[month] }}
-                    </q-badge></q-item-label
+                    </q-badge>
+                  </q-item-label
                   >
                 </q-item-section>
               </q-item>
@@ -174,7 +176,7 @@
 <script setup>
 import { exportFile, useQuasar } from 'quasar'
 import { ref, computed } from 'vue'
-import { supabase } from '../boot/supabase'
+import { supabase } from 'boot/supabase'
 import { useI18n } from 'vue-i18n'
 import Constants from 'src/constants/index'
 import StaffDialog from '../components/StaffDialog.vue'
@@ -236,7 +238,6 @@ const handleDeleteRequest = data => {
     color: 'negative',
     title: i18n.t('confirm'),
     message: i18n.t('deleteConf'),
-    cancel: true,
     persistent: true,
     ok: {
       push: true,
@@ -506,10 +507,11 @@ const secondaryColumns = computed(() => [
 ])
 </script>
 
-<style lang="scss" scoped>
+<style lang='scss' scoped>
 .v-enter-active {
   animation: fadeIn 1.5s;
 }
+
 .v-leave-active {
   animation: fadeOut 0.15s;
 }

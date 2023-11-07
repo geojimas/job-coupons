@@ -24,7 +24,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useUserStore } from '../stores/userStore'
+import { useUserStore } from 'stores/userStore'
 
 const store = useUserStore()
 

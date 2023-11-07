@@ -13,8 +13,8 @@ export default {
   username: 'Όνομα',
   surname: 'Επώνυμο',
   email: 'email',
-  phone: 'Αριθμός τηλεφώνου',
-  contractExp: 'Ημερομηνία λήξης σήμβασης',
+  phone: 'τηλέφωνο',
+  contractExp: 'Λήξης σήμβασης',
   couponsRights: 'Δικαιούται Κουπόνια',
   january: 'Ιανουάριος',
   february: 'Φεβρουάριος',
@@ -58,5 +58,7 @@ export default {
   withCoupon: 'Με κουπόνια',
   withoutCoupon: 'Χωρίς Κουπόνια',
   rowsPerPage:'Εγραφές ανά σελίδα',
-  connectedWith: 'Συνδεδεμένος με :'
+  connectedWith: 'Συνδεδεμένος με :',
+  notFound: 'Αυτή η Σελίδα δεν υπάρχει...',
+  ReturnHome: 'Επιστροφή'
 }

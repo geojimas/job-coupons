@@ -86,7 +86,6 @@ const getDataFromServer = async () => {
   flex-direction: column;
   &__statistics {
     display: flex;
-    justify-content: center;
     justify-content: space-around;
     flex-wrap: wrap;
   }
