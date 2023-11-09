@@ -257,9 +257,7 @@ const HandleSubmitRequest = async () => {
   // fill moths data with values
   for (let index = 0; index < months.value.length; index++) {
     sentData.value[months.value[index]] =
-      formData.value.coupon_rights === false || numOfCoupons.value[index] === ''
-        ? 0
-        : parseInt(numOfCoupons.value[index])
+      numOfCoupons.value[index] === '' ? 0 : parseInt(numOfCoupons.value[index])
   }
 
   try {
@@ -301,12 +299,10 @@ const HandleUpdateRequest = async () => {
     coupon_rights: formData.value.coupon_rights
   }
 
-    // fill moths data with values
-    for (let index = 0; index < months.value.length; index++) {
+  // fill moths data with values
+  for (let index = 0; index < months.value.length; index++) {
     sentData.value[months.value[index]] =
-      formData.value.coupon_rights === false || numOfCoupons.value[index] === ''
-        ? 0
-        : parseInt(numOfCoupons.value[index])
+      numOfCoupons.value[index] === '' ? 0 : parseInt(numOfCoupons.value[index])
   }
 
   try {
