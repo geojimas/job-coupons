@@ -30,7 +30,7 @@ import { ref, onMounted, computed } from 'vue'
 import StaffTable from '../components/StaffTable.vue'
 import StaffCouponChart from 'src/components/StaffCouponChart.vue'
 import StaffCouponPercent from 'src/components/StaffCouponPercent.vue'
-import { supabase } from '../boot/supabase'
+import { supabase } from 'boot/supabase'
 
 const dataFromServer = ref([])
 const loadingState = ref(true)

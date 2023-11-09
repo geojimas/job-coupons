@@ -3,9 +3,9 @@
     <q-table
       :title="`${$t('staffTable')}`"
       title-class='text-h5 text-bold'
-      :rows='props.dataFromServer'
+      :rows='dataFromServer'
       :columns='mainlyColumns'
-      :loading='props.loadingState'
+      :loading='loadingState'
       :pagination='pagination'
       :separator='separator'
       :filter='filter'
@@ -185,7 +185,7 @@ import dayjs from 'dayjs'
 const emits = defineEmits(['getServerBackFromParents'])
 
 const props = defineProps({
-  dataFromServer: {
+dataFromServer: {
     type: Array,
     required: true
   },
