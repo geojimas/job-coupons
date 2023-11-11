@@ -142,7 +142,13 @@
           </div>
           <div style="display: flex; justify-content: end" class="q-pa-sm">
             <q-btn class="q-mr-sm" flat :label="`${$t('cancel')}`" no-caps v-close-popup />
-            <q-btn type="submit" color="secondary" push no-caps :label="`${$t('save')}`" />
+            <q-btn
+              type="submit"
+              color="secondary"
+              push
+              no-caps
+              :disable="toggleModalMode === Constants.editMode && !isDataChanged"
+              :label="`${$t('save')}`" />
           </div>
         </q-form>
       </q-card-section>
@@ -197,13 +203,11 @@ const openModal = payload => {
   if (payload) {
     currentItemRowData.value = payload
     toggleModalMode.value = Constants.editMode
-    // Update the fields in FORM
-    for (const key in formData.value) {
-      if (currentItemRowData.value[key] !== null) {
-        formData.value[key] = currentItemRowData.value[key]
-      }
-    }
-    // Update form with the values in numOfCoupons  in FORM
+
+    // Create a separate copy of the data
+    formData.value = { ...currentItemRowData.value }
+
+    // Update form with the values in numOfCoupons in FORM
     for (let index = 0; index < numOfCoupons.value.length; index++) {
       const monthKey = Constants[months.value[index].toLowerCase()]
       if (currentItemRowData.value[monthKey] !== null) {
@@ -228,6 +232,7 @@ defineExpose({
 
 watch(toggleModal, newToggleModal => {
   if (!newToggleModal) {
+    // Reset values in modal close
     formData.value.name = ''
     formData.value.surname = ''
     formData.value.email = ''
@@ -236,11 +241,55 @@ watch(toggleModal, newToggleModal => {
     formData.value.contract_term = null
     currentItemRowData.value = {}
 
-    // fill moths data with values
     for (let index = 0; index < months.value.length; index++) {
       numOfCoupons.value[index] = ''
     }
   }
+})
+
+const isDataChanged = computed(() => {
+  // Array of field names to compare
+  const mainFieldsToCompare = [
+    'name',
+    'surname',
+    'email',
+    'phone',
+    'contract_term',
+    'coupon_rights'
+  ]
+
+  const monthsFieldsToCompare = [
+    'january',
+    'february',
+    'march',
+    'april',
+    'may',
+    'june',
+    'july',
+    'august',
+    'september',
+    'october',
+    'november',
+    'december'
+  ]
+
+  // Use the some method to check if any main field has changed
+  const mainFieldsChanged = mainFieldsToCompare.some(
+    field => formData.value[field] !== currentItemRowData.value[field]
+  )
+
+  const monthsChanged = monthsFieldsToCompare.some(field => {
+    const currentIndex = monthsFieldsToCompare.indexOf(field)
+    const currentValue = numOfCoupons.value[currentIndex]
+    const currentDataValue = currentItemRowData.value[field]
+
+    // Convert empty string to 0 for comparison
+    const sanitizedValue = currentValue === '' ? 0 : parseInt(currentValue)
+
+    return sanitizedValue !== currentDataValue
+  })
+  // Return true if any main field or month-related field has changed
+  return mainFieldsChanged || monthsChanged
 })
 
 const HandleSubmitRequest = async () => {
