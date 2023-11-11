@@ -46,7 +46,7 @@ export default {
   editDataMsg: 'successfully Edited',
   deleteConf: 'Are you sure you want to delete this ?',
   confirm: 'Confirmation',
-  deleteMsg: 'User {name} successfully deleted',
+  deleteMsg: 'User successfully deleted',
   serverNotFound: "Didn't find anything :(",
   totalCoupons: 'Total Coupons',
   actions: 'Actions',

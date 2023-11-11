@@ -46,7 +46,7 @@ export default {
   editDataMsg: 'Επεξεργάστηκε με επιτύχια',
   deleteConf: 'Είσαι σίγουρος οτι θέλεις να το διαγράψεις ;',
   confirm: 'Επιβεβαίωση',
-  deleteMsg: 'Ο χρήστης {name} διαγράφηκε με επιτυχία',
+  deleteMsg: 'Ο χρήστης διαγράφηκε με επιτυχία',
   serverNotFound: 'Δεν βρέθηκε κάτι :(',
   totalCoupons: 'Συνολικά κουπόνια',
   actions: 'Ενέργεις',

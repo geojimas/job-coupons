@@ -320,7 +320,7 @@ const HandleSubmitRequest = async () => {
     $q.notify({
       position: 'top',
       message: i18n.t('postDataMsg'),
-      color: 'primary',
+      color: 'positive',
       icon: 'thumb_up',
       progress: true,
       timeout: 1500
@@ -367,7 +367,7 @@ const HandleUpdateRequest = async () => {
     $q.notify({
       position: 'top',
       message: i18n.t('editDataMsg'),
-      color: 'primary',
+      color: 'positive',
       icon: 'thumb_up',
       progress: true,
       timeout: 1500
