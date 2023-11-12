@@ -43,9 +43,12 @@ const options = computed(() => {
     },
     title: {
       text: i18n.t('staffWithCoupons'),
-      align: 'center'
+      align: 'center',
+      style: {
+        color: getCssVar('warning'),
+      }
     },
-    colors: [getCssVar('primary')],
+    colors: [getCssVar('warning')],
     plotOptions: {
       radialBar: {
         startAngle: -90,
@@ -68,6 +71,8 @@ const options = computed(() => {
             show: true
           },
           value: {
+            show: true,
+            color: getCssVar('warning'),
             offsetY: -50,
             fontSize: '25px'
           }

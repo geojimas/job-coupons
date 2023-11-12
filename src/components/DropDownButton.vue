@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div :class="dynamicClass">
     <q-btn-dropdown glossy push color="secondary" icon="manage_accounts">
       <div class="row no-wrap q-pa-sm">
         <!-- <div class="column">
@@ -25,6 +25,8 @@
 <script setup>
 import { computed } from 'vue'
 import { useUserStore } from 'stores/userStore'
+import { useQuasar } from 'quasar'
+const $q = useQuasar()
 
 const store = useUserStore()
 
@@ -34,4 +36,7 @@ const currentUser = computed(() => {
 const handleLogout = () => {
   store.logoutUser()
 }
+const dynamicClass = computed(() => {
+  return $q.screen.gt.xs ? 'q-mr-lg' : ''
+})
 </script>

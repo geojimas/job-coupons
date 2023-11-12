@@ -1,8 +1,7 @@
 <template>
-  <div>
+  <div :class="dynamicClass">
     <q-btn-toggle
       v-model="changeLanguage"
-      class="q-mr-md"
       rounded
       toggle-color="secondary"
       color="dark"
@@ -15,6 +14,8 @@
 import { ref, computed } from 'vue'
 import Constants from 'src/constants/index'
 import { useLanguageStore } from 'stores/languageStore'
+import { useQuasar } from 'quasar'
+const $q = useQuasar()
 
 const store = useLanguageStore()
 const selectedLang = ref(store.getAppLanguage)
@@ -33,5 +34,9 @@ const changeLanguage = computed({
       window.location.pathname + window.location.search + window.location.hash
     )
   }
+})
+
+const dynamicClass = computed(() => {
+  return $q.screen.gt.xs ? 'q-mr-lg' : 'q-mr-sm'
 })
 </script>

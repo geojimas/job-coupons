@@ -9,149 +9,148 @@
       no-caps
       push />
     <q-dialog persistent v-model="toggleModal">
-      <q-card-section style="max-height: 65vh" class="bg-white">
-        <q-chip
-          class="q-mb-sm"
-          color="dark"
-          :label="$t(`${toggleModalMode}`)"
-          text-color="white"
-          :icon="chipIcon">
-        </q-chip>
-        <q-form autofocus @submit="HandleSubmissions">
-          <div class="row">
-            <div class="col q-ma-sm">
-              <q-input
-                outlined
-                clearable
-                maxlength="30"
-                autocomplete="off"
-                name="name"
-                style="max-width: 220px"
-                color="secondary"
-                :rules="[
-                  val => (val && val.length > 0) || `${$t('nameValidation1')}`,
-                  val => (val && val.length >= 3) || `${$t('nameValidation2')}`
-                ]"
-                type="text"
-                v-model="formData.name"
-                :label="`${$t('username')}`" />
+      <q-card>
+        <q-card-section style="max-height: 60vh">
+          <q-chip
+            class="q-mb-sm"
+            color="dark"
+            :label="$t(`${toggleModalMode}`)"
+            text-color="white"
+            :icon="chipIcon">
+          </q-chip>
+          <q-form id="employeeForm" autofocus @submit="HandleSubmissions">
+            <div class="row">
+              <div class="col q-ma-sm">
+                <q-input
+                  outlined
+                  clearable
+                  maxlength="30"
+                  autocomplete="off"
+                  name="name"
+                  style="max-width: 220px"
+                  color="secondary"
+                  :rules="[
+                    val => (val && val.length > 0) || `${$t('nameValidation1')}`,
+                    val => (val && val.length >= 3) || `${$t('nameValidation2')}`
+                  ]"
+                  type="text"
+                  v-model="formData.name"
+                  :label="`${$t('username')}`" />
+              </div>
+              <div class="col q-ma-sm">
+                <q-input
+                  outlined
+                  clearable
+                  autocomplete="off"
+                  maxlength="30"
+                  name="surname"
+                  style="max-width: 220px"
+                  color="secondary"
+                  :rules="[
+                    val => (val && val.length > 0) || `${$t('surnameValidation1')}`,
+                    val => (val && val.length >= 3) || `${$t('surnameValidation2')}`
+                  ]"
+                  type="text"
+                  v-model="formData.surname"
+                  :label="`${$t('surname')}`" />
+              </div>
             </div>
-            <div class="col q-ma-sm">
-              <q-input
-                outlined
-                clearable
-                autocomplete="off"
-                maxlength="30"
-                name="surname"
-                style="max-width: 220px"
-                color="secondary"
-                :rules="[
-                  val => (val && val.length > 0) || `${$t('surnameValidation1')}`,
-                  val => (val && val.length >= 3) || `${$t('surnameValidation2')}`
-                ]"
-                type="text"
-                v-model="formData.surname"
-                :label="`${$t('surname')}`" />
+            <div class="row">
+              <div class="col q-ma-sm">
+                <q-input
+                  outlined
+                  clearable
+                  name="email"
+                  maxlength="45"
+                  autocomplete="off"
+                  style="max-width: 220px"
+                  color="secondary"
+                  type="email"
+                  :rules="[(val, rules) => rules.email(val) || `${$t('validEmail')}`]"
+                  v-model="formData.email"
+                  :label="`${$t('email')}`" />
+              </div>
+              <div class="col q-ma-sm">
+                <q-input
+                  outlined
+                  clearable
+                  name="phone"
+                  autocomplete="off"
+                  maxlength="10"
+                  style="max-width: 220px"
+                  color="secondary"
+                  type="tel"
+                  :rules="[val => !val || /^\d+$/.test(val) || $t('validPhone2')]"
+                  v-model="formData.phone"
+                  :label="`${$t('phone')}`" />
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col q-ma-sm">
-              <q-input
-                outlined
-                clearable
-                name="email"
-                maxlength="45"
-                autocomplete="off"
-                style="max-width: 220px"
-                color="secondary"
-                type="email"
-                :rules="[(val, rules) => rules.email(val) || `${$t('validEmail')}`]"
-                v-model="formData.email"
-                :label="`${$t('email')}`" />
+            <div class="row">
+              <div class="col q-ma-sm">
+                <q-input
+                  :label="`${$t('contractExp')}`"
+                  outlined
+                  clearable
+                  autocomplete="off"
+                  style="max-width: 220px"
+                  name="contactTerm"
+                  color="secondary"
+                  v-model="formData.contract_term">
+                  <template v-slot:append>
+                    <q-icon name="event" class="cursor-pointer">
+                      <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                        <q-date minimal color="secondary" v-model="formData.contract_term">
+                          <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Close" color="secondary" flat />
+                          </div>
+                        </q-date>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
+              </div>
+              <div class="col q-ma-sm">
+                <q-toggle
+                  class="q-ml-md"
+                  keep-color
+                  name="couponsRight"
+                  v-model="formData.coupon_rights"
+                  left-label
+                  :label="`${$t('couponsRights')}`"
+                  checked-icon="check"
+                  color="secondary"
+                  unchecked-icon="clear" />
+              </div>
             </div>
-            <div class="col q-ma-sm">
-              <q-input
-                outlined
-                clearable
-                name="phone"
-                autocomplete="off"
-                maxlength="10"
-                style="max-width: 220px"
-                color="secondary"
-                type="tel"
-                :rules="[
-                  val => val.length <= 10 || $t('validPhone1'),
-                  val => !val || /^\d+$/.test(val) || $t('validPhone2')
-                ]"
-                v-model="formData.phone"
-                :label="`${$t('phone')}`" />
+            <div class="row">
+              <div class="q-ma-sm" v-for="(value, index) in numOfCoupons" :key="index">
+                <q-input
+                  outlined
+                  autocomplete="off"
+                  :name="`'${value}'`"
+                  :style="monthsInputClass"
+                  color="secondary"
+                  maxlength="2"
+                  type="tel"
+                  :rules="[val => !val || /^-?\d+$/.test(val) || $t('validInteger2')]"
+                  :disable="formData.coupon_rights === false"
+                  v-model="numOfCoupons[index]"
+                  :label="$t(months[index])" />
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col q-ma-sm">
-              <q-input
-                :label="`${$t('contractExp')}`"
-                outlined
-                clearable
-                autocomplete="off"
-                style="max-width: 220px"
-                name="contactTerm"
+            <div style="display: flex; justify-content: end" class="q-pa-sm">
+              <q-btn class="q-mr-sm" flat :label="`${$t('cancel')}`" no-caps v-close-popup />
+              <q-btn
+                type="submit"
                 color="secondary"
-                v-model="formData.contract_term">
-                <template v-slot:append>
-                  <q-icon name="event" class="cursor-pointer">
-                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date minimal color="secondary" v-model="formData.contract_term">
-                        <div class="row items-center justify-end">
-                          <q-btn v-close-popup label="Close" color="secondary" flat />
-                        </div>
-                      </q-date>
-                    </q-popup-proxy>
-                  </q-icon>
-                </template>
-              </q-input>
+                push
+                no-caps
+                :disable="toggleModalMode === Constants.editMode && !isDataChanged"
+                :label="`${$t('save')}`" />
             </div>
-            <div class="col q-ma-sm">
-              <q-toggle
-                class="q-ml-md"
-                keep-color
-                name="couponsRight"
-                v-model="formData.coupon_rights"
-                left-label
-                :label="`${$t('couponsRights')}`"
-                checked-icon="check"
-                color="secondary"
-                unchecked-icon="clear" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="q-ma-sm" v-for="(value, index) in numOfCoupons" :key="index">
-              <q-input
-                outlined
-                autocomplete="off"
-                :name="`'${value}'`"
-                :style="monthsInputClass"
-                color="secondary"
-                maxlength="2"
-                type="tel"
-                :rules="[val => !val || /^-?\d+$/.test(val) || $t('validInteger2')]"
-                :disable="formData.coupon_rights === false"
-                v-model="numOfCoupons[index]"
-                :label="$t(months[index])" />
-            </div>
-          </div>
-          <div style="display: flex; justify-content: end" class="q-pa-sm">
-            <q-btn class="q-mr-sm" flat :label="`${$t('cancel')}`" no-caps v-close-popup />
-            <q-btn
-              type="submit"
-              color="secondary"
-              push
-              no-caps
-              :disable="toggleModalMode === Constants.editMode && !isDataChanged"
-              :label="`${$t('save')}`" />
-          </div>
-        </q-form>
-      </q-card-section>
+          </q-form>
+        </q-card-section>
+      </q-card>
     </q-dialog>
   </div>
 </template>

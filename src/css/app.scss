@@ -1,4 +1,7 @@
 // app global css in SCSS form
+* {
+  transition: background 0.5s ease;
+}
 body {
   background-color: rgb(236, 233, 233);
 }

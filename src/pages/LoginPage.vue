@@ -1,14 +1,15 @@
 <template>
-  <q-page class="flex flex-center bg-grey-4">
+  <q-page class="flex flex-center">
     <q-card class="q-pa-md shadow-2 my_card animate__animated animate__bounceIn" bordered>
       <q-card-section class="text-center">
-        <div class="text-grey-9 text-h4 text-weight-bold">{{ $t('login') }}</div>
+        <div class="text-secondary text-h4 text-weight-bold">{{ $t('login') }}</div>
       </q-card-section>
       <q-card-section>
-        <q-input dense outlined v-model="email" label="email"></q-input>
+        <q-input dense outlined color="secondary" v-model="email" label="email"></q-input>
         <q-input
           dense
           outlined
+          color="secondary"
           class="q-mt-md"
           v-model="password"
           type="password"
@@ -18,7 +19,7 @@
         <q-btn
           style="border-radius: 8px"
           @click.prevent="handleLogin"
-          color="dark"
+          color="secondary"
           rounded
           size="md"
           :label="`${$t('login')}`"

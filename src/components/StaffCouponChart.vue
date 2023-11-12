@@ -40,7 +40,10 @@ const options = computed(() => {
   return {
     title: {
       text: i18n.t('staffCoupon'),
-      align: 'center'
+      align: 'left',
+      style: {
+        color: getCssVar('positive')
+      }
     },
     chart: {
       id: 'apex-donut'
@@ -54,7 +57,7 @@ const options = computed(() => {
       style: {
         fontSize: '14px',
         fontWeight: 'bold',
-        colors: undefined
+        colors: ['black']
       },
       background: {
         enabled: true,
@@ -73,35 +76,32 @@ const options = computed(() => {
           opacity: 0.45
         }
       },
-      dropShadow: {
-        enabled: false,
-        top: 1,
-        left: 1,
-        blur: 1,
-        color: '#000',
-        opacity: 0.45
-      }
     },
-    colors: [getCssVar('primary'), getCssVar('negative')],
-    markers: {
-      size: 4,
-      hover: {
-        sizeOffset: 6
-      }
-    },
+    colors: [getCssVar('positive'), getCssVar('negative')],
     labels: [i18n.t('withCoupon'), i18n.t('withoutCoupon')],
     plotOptions: {
       pie: {
         donut: {
+          size: '60%',
+          background: 'transparent',
           labels: {
             show: true,
+            value: {
+              show: true,
+              fontSize: '20px',
+              fontWeight: 600,
+              color: getCssVar('positive'),
+              formatter: function (val) {
+                return val
+              }
+            },
             total: {
               show: true,
               showAlways: true,
               label: i18n.t('total'),
               fontSize: '20px',
               fontWeight: 600,
-              color: '#373d3f',
+              color: getCssVar('positive'),
               formatter: function (w) {
                 return w.globals.seriesTotals.reduce((a, b) => {
                   return a + b
