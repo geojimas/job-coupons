@@ -6,14 +6,17 @@
       :rows="dataFromServer"
       :columns="mainlyColumns"
       :loading="loadingState"
-      :pagination="pagination"
+      v-model:pagination="pagination"
+      hide-pagination
       :separator="separator"
       :filter="filter"
+      flat
       no-data
       :no-data-label="`${$t('serverNotFound')}`"
       :rows-per-page-label="`${$t('rowsPerPage')}`"
       :dense="$q.screen.lt.xl"
       row-key="id"
+      class="staff_table"
       table-class="q-mx-sm animate__animated animate__fadeIn">
       <template v-slot:loading>
         <q-inner-loading showing color="secondary" />
@@ -146,28 +149,37 @@
               @click="handleDeleteRequest(props.row)"></q-btn>
           </div>
         </q-tr>
-        <Transition>
-          <q-tr v-show="props.expand" :props="props">
-            <q-td class="rounded-borders" colspan="100%">
-              <q-item>
-                <q-item-section v-for="month in months" :key="month">
-                  <q-item-label class="flex justify-center q-mx-sm"
-                    >{{ $t(`${month}`) }}
-                  </q-item-label>
-                  <q-item-label class="flex justify-center">
-                    <q-badge
-                      class="text-bold"
-                      :color="props.row[month] === 0 ? 'negative' : 'green'">
-                      {{ props.row[month] }}
-                    </q-badge>
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-td>
-          </q-tr>
-        </Transition>
+        <q-tr v-show="props.expand" :props="props">
+          <q-td class="rounded-borders" colspan="100%">
+            <q-item>
+              <q-item-section v-for="month in months" :key="month">
+                <q-item-label class="flex justify-center q-mx-sm"
+                  >{{ $t(`${month}`) }}
+                </q-item-label>
+                <q-item-label class="flex justify-center">
+                  <q-badge class="text-bold" :color="props.row[month] === 0 ? 'negative' : 'green'">
+                    {{ props.row[month] }}
+                  </q-badge>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-td>
+        </q-tr>
       </template>
     </q-table>
+    <div
+      :style="$q.dark.isActive ? 'background-color: none;' : 'background-color: #fff'"
+      class="row justify-center q-py-xs">
+      <q-pagination
+        v-model="pagination.page"
+        direction-links
+        push
+        active-design="push"
+        active-color="warning"
+        color="secondary"
+        :max="pagesNumber"
+        size="md" />
+    </div>
   </div>
 </template>
 
@@ -218,8 +230,13 @@ const i18n = useI18n()
 const pagination = ref({
   sortBy: 'name',
   descending: false,
-  rowsPerPage: 10
+  rowsPerPage: 8,
+  page: 1
 })
+
+const pagesNumber = computed(() =>
+  Math.ceil(props.dataFromServer.length / pagination.value.rowsPerPage)
+)
 
 const getDataFromServerParent = () => {
   emits('getServerBackFromParents')
@@ -504,18 +521,3 @@ const secondaryColumns = computed(() => [
   }
 ])
 </script>
-
-<style lang="scss" scoped>
-.v-enter-active {
-  animation: fadeIn 1.5s;
-}
-
-.v-leave-active {
-  animation: fadeOut 0.15s;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-</style>
