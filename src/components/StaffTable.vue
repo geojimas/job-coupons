@@ -97,7 +97,7 @@
               rounded
               :color="props.expand ? 'negative' : 'teal'"
               @click="props.expand = !props.expand"
-              :icon="props.expand ? 'expand_less' : 'expand_more'" />
+              :icon="props.expand ? 'close' : 'arrow_drop_down'" />
           </q-td>
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
             <q-chip
