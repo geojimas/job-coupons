@@ -4,7 +4,7 @@
       :title="`${$t('staffTable')}`"
       title-class="text-h5 text-bold"
       :rows="dataFromServer"
-      :columns="mainlyColumns"
+      :columns="primaryColumns"
       :loading="loadingState"
       v-model:pagination="pagination"
       hide-pagination
@@ -27,67 +27,43 @@
             class="q-mr-sm"
             color="secondary"
             name="settings_accessibility"
-            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
+            :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
       <template v-slot:header-cell-surname="props">
         <q-th :props="props">
-          <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="badge"
-            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
+          <q-icon class="q-mr-sm" color="secondary" name="badge" :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
       <template v-slot:header-cell-email="props">
         <q-th :props="props">
-          <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="alternate_email"
-            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
+          <q-icon class="q-mr-sm" color="secondary" name="alternate_email" :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
       <template v-slot:header-cell-phone="props">
         <q-th :props="props">
-          <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="call"
-            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
+          <q-icon class="q-mr-sm" color="secondary" name="call" :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
       <template v-slot:header-cell-contract_term="props">
         <q-th :props="props">
-          <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="event"
-            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
+          <q-icon class="q-mr-sm" color="secondary" name="event" :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
       <template v-slot:header-cell-coupon_rights="props">
         <q-th :props="props">
-          <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="card_membership"
-            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
+          <q-icon class="q-mr-sm" color="secondary" name="card_membership" :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
       <template v-slot:header-cell-total_coupons="props">
         <q-th :props="props">
-          <q-icon
-            class="q-mr-sm"
-            color="secondary"
-            name="all_out"
-            :size="$q.screen.lt.xl ? '1.1em' : '1.3em'" />
+          <q-icon class="q-mr-sm" color="secondary" name="all_out" :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
@@ -111,12 +87,6 @@
           :label="`${$t('exportToCSV')}`"
           no-caps
           @click="exportTable" />
-        <q-btn
-          round
-          class="q-mr-lg"
-          color="secondary"
-          :icon="props.inFullscreen ? 'close_fullscreen' : 'fullscreen'"
-          @click="props.toggleFullscreen" />
       </template>
       <template v-slot:body="props">
         <q-tr :props="props">
@@ -130,9 +100,26 @@
               :icon="props.expand ? 'expand_less' : 'expand_more'" />
           </q-td>
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
-            {{ col.value }}
+            <q-chip
+              v-if="col.name === 'coupon_rights'"
+              outline
+              text-color="white"
+              :style="columnFontStyle"
+              :color="col.value === 'true' ? 'positive' : 'negative'"
+              :icon="col.value === 'true' ? 'check_circle' : 'cancel'"
+              :label="col.value === 'true' ? i18n.t('yes') : i18n.t('no')" />
+            <q-chip
+              v-else-if="col.name === 'total_coupons'"
+              outline
+              :style="columnFontStyle"
+              text-color="white"
+              :color="col.value != '0' ? 'positive' : 'negative'"
+              :label="col.value" />
+            <div v-else>
+              {{ col.value }}
+            </div>
           </q-td>
-          <div style="display: flex; justify-content: center; flex-wrap: nowrap">
+          <div class="flex justify-center no-wrap">
             <q-btn
               color="primary"
               rounded
@@ -175,7 +162,7 @@
         direction-links
         push
         active-design="push"
-        active-color="warning"
+        active-color="negative"
         color="secondary"
         :max="pagesNumber"
         size="md" />
@@ -237,6 +224,10 @@ const pagination = ref({
 const pagesNumber = computed(() =>
   Math.ceil(props.dataFromServer.length / pagination.value.rowsPerPage)
 )
+
+const iconSize = computed(() => {
+  return $q.screen.lt.xl ? '1.1em' : '1.3em'
+})
 
 const getDataFromServerParent = () => {
   emits('getServerBackFromParents')
@@ -310,7 +301,7 @@ function wrapCsvValue(val, formatFn, row) {
 
 function exportTable() {
   // Copy the columns array and exclude the last column
-  const columnsToExport = [...mainlyColumns.value, ...secondaryColumns.value]
+  const columnsToExport = [...primaryColumns.value, ...secondaryColumns.value]
 
   // Naive encoding to csv format
   const content = [columnsToExport.map(col => wrapCsvValue(col.label))]
@@ -347,7 +338,7 @@ const headerColumnFontStyle = ref(
   $q.screen.lt.xl ? 'font-size: 12px' : 'font-weight: bold; font-size: 15px'
 )
 
-const mainlyColumns = computed(() => [
+const primaryColumns = computed(() => [
   {},
   {
     name: 'name',
@@ -404,7 +395,7 @@ const mainlyColumns = computed(() => [
     name: 'coupon_rights',
     label: i18n.t('couponsRights'),
     align: 'center',
-    field: row => (row.coupon_rights === false ? i18n.t('no') : i18n.t('yes')),
+    field: row => row.coupon_rights,
     format: val => `${val}`,
     sortable: true,
     headerStyle: headerColumnFontStyle.value,

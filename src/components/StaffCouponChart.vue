@@ -1,5 +1,5 @@
 <template>
-  <q-card class="relative-position card-animation" bordered>
+  <q-card class="relative-position card-animation">
     <q-card-section>
       <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
         <VueApexCharts

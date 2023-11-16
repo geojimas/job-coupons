@@ -23,11 +23,11 @@
               <div class="col q-ma-sm">
                 <q-input
                   outlined
-                  clearable
+                  :clearable="clearableInput"
                   maxlength="30"
                   autocomplete="off"
                   name="name"
-                  style="max-width: 220px"
+                  :style="inputStyle"
                   color="secondary"
                   :rules="[
                     val => (val && val.length > 0) || `${$t('nameValidation1')}`,
@@ -40,11 +40,11 @@
               <div class="col q-ma-sm">
                 <q-input
                   outlined
-                  clearable
+                  :clearable="clearableInput"
                   autocomplete="off"
                   maxlength="30"
                   name="surname"
-                  style="max-width: 220px"
+                  :style="inputStyle"
                   color="secondary"
                   :rules="[
                     val => (val && val.length > 0) || `${$t('surnameValidation1')}`,
@@ -59,11 +59,11 @@
               <div class="col q-ma-sm">
                 <q-input
                   outlined
-                  clearable
+                  :clearable="clearableInput"
                   name="email"
                   maxlength="45"
                   autocomplete="off"
-                  style="max-width: 220px"
+                  :style="inputStyle"
                   color="secondary"
                   type="email"
                   :rules="[(val, rules) => rules.email(val) || `${$t('validEmail')}`]"
@@ -73,11 +73,11 @@
               <div class="col q-ma-sm">
                 <q-input
                   outlined
-                  clearable
+                  :clearable="clearableInput"
                   name="phone"
                   autocomplete="off"
                   maxlength="10"
-                  style="max-width: 220px"
+                  :style="inputStyle"
                   color="secondary"
                   type="tel"
                   :rules="[val => !val || /^\d+$/.test(val) || $t('validPhone2')]"
@@ -90,9 +90,9 @@
                 <q-input
                   :label="`${$t('contractExp')}`"
                   outlined
-                  clearable
+                  :clearable="clearableInput"
                   autocomplete="off"
-                  style="max-width: 220px"
+                  :style="inputStyle"
                   name="contactTerm"
                   color="secondary"
                   v-model="formData.contract_term">
@@ -138,7 +138,7 @@
                   :label="$t(months[index])" />
               </div>
             </div>
-            <div style="display: flex; justify-content: end" class="q-pa-sm">
+            <div class="q-pa-sm flex justify-end">
               <q-btn class="q-mr-sm" flat :label="`${$t('cancel')}`" no-caps v-close-popup />
               <q-btn
                 type="submit"
@@ -182,6 +182,10 @@ const formData = ref({
 const monthsInputClass = computed(() => {
   return $q.screen.lt.md ? 'width: 85px' : 'width: 110px'
 })
+const clearableInput = computed(() => {
+  return $q.screen.gt.sm
+})
+const inputStyle = ref('max-width: 220px')
 const numOfCoupons = ref(['', '', '', '', '', '', '', '', '', '', '', ''])
 const months = ref([
   Constants.january,
