@@ -31,12 +31,20 @@ import StaffTable from '../components/StaffTable.vue'
 import StaffCouponChart from 'src/components/StaffCouponChart.vue'
 import StaffCouponPercent from 'src/components/StaffCouponPercent.vue'
 import { supabase } from 'boot/supabase'
+import { useQuasar } from 'quasar'
+import { useI18n } from 'vue-i18n'
+import { useUserStore } from 'stores/userStore'
+const store = useUserStore()
 
+const $q = useQuasar()
+const i18n = useI18n()
 const dataFromServer = ref([])
 const loadingState = ref(true)
+const acceptCookies = ref(false)
 
 onMounted(() => {
   getDataFromServer()
+  cookieConsent()
 })
 
 const numberOfPeopleWithCouponRights = computed(() => {
@@ -74,6 +82,36 @@ const getDataFromServer = async () => {
       icon: 'report_problem',
       progress: true,
       timeout: 1500
+    })
+  }
+}
+
+const cookieConsent = () => {
+  if (!store.getCookieIfExists) {
+    $q.notify({
+      message: i18n.t('cookieMsg'),
+      color: 'secondary',
+      timeout: 0,
+      textColor: 'white',
+      position: 'bottom-right',
+      actions: [
+        {
+          label: i18n.t('accept'),
+          color: 'warning',
+          handler: () => {
+            acceptCookies.value = true
+            store.handleCookies(acceptCookies.value)
+          }
+        },
+        {
+          label: i18n.t('dismiss'),
+          color: 'white',
+          handler: () => {
+            acceptCookies.value = false
+            store.handleCookies(acceptCookies.value)
+          }
+        }
+      ]
     })
   }
 }

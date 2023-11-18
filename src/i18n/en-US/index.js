@@ -60,5 +60,8 @@ export default {
   rowsPerPage:'rows per Page',
   connectedWith: 'Connected With :',
   notFound: 'Oops. Nothing here...',
-  ReturnHome: 'Go Home'
+  ReturnHome: 'Go Home',
+  cookieMsg: 'We use cookies to ensure you get the best experience on our website.',
+  accept: 'Accept',
+  dismiss: 'Dismiss'
 }
