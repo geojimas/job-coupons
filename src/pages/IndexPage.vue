@@ -27,15 +27,15 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import StaffTable from '../components/StaffTable.vue'
+import StaffTable from 'src/components/StaffTable.vue'
 import StaffCouponChart from 'src/components/StaffCouponChart.vue'
 import StaffCouponPercent from 'src/components/StaffCouponPercent.vue'
 import { supabase } from 'boot/supabase'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from 'stores/userStore'
-const store = useUserStore()
 
+const store = useUserStore()
 const $q = useQuasar()
 const i18n = useI18n()
 const dataFromServer = ref([])

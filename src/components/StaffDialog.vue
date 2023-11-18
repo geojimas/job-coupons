@@ -313,7 +313,6 @@ const HandleSubmitRequest = async () => {
   }
 
   try {
-    console.log(sentData.value)
     const { error: errorData } = await supabase.from('staff').insert(sentData.value)
     if (errorData) {
       throw new Error(errorData.message)
