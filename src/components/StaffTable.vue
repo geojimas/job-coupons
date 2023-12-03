@@ -1,5 +1,5 @@
 <template>
-  <div :class="$q.screen.lt.xl ? 'q-ma-sm' : 'q-ma-xl'">
+  <div :class="$q.screen.lt.xl ? 'q-ma-xl' : 'q-ma-xl'">
     <q-table
       :title="`${$t('staffTable')}`"
       title-class="text-h5 text-bold"
@@ -97,7 +97,7 @@
               rounded
               :color="props.expand ? 'negative' : 'teal'"
               @click="props.expand = !props.expand"
-              :icon="props.expand ? 'close' : 'arrow_drop_down'" />
+              :icon="props.expand ? 'close' : 'arrow_downward'" />
           </q-td>
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
             <q-chip
@@ -123,13 +123,12 @@
             <q-btn
               color="primary"
               rounded
-              class="q-ma-sm"
+              class="q-mr-sm"
               debounce="300"
               icon="mode_edit"
               @click="callChildOpenModalMethod(props.row)"></q-btn>
             <q-btn
               color="negative"
-              class="q-ma-sm"
               rounded
               debounce="300"
               icon="delete"
