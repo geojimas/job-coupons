@@ -1,5 +1,5 @@
 <template>
-  <div :class="$q.screen.lt.md ? 'q-ma-sm' : 'q-ma-xl'">
+  <div :class="$q.screen.lt.lg ? 'q-ma-sm' : 'q-ma-xl'">
     <q-table
       :title="`${$t('staffTable')}`"
       title-class="text-h5 text-bold"
