@@ -159,12 +159,14 @@
       <q-pagination
         v-model="pagination.page"
         direction-links
-        push
-        active-design="push"
-        active-color="negative"
-        color="secondary"
+        active-color="secondary"
+        color="dark"
+        outline
+        active-design="unelevated"
+        active-text-color="white"
         :max="pagesNumber"
-        size="md" />
+        size="md"
+        gutter="sm" />
     </div>
   </div>
 </template>
