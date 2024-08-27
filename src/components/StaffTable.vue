@@ -154,13 +154,13 @@
       </template>
     </q-table>
     <div
-      :style="$q.dark.isActive ? 'background-color: none;' : 'background-color: #fff'"
+      :style="$q.dark.isActive ? 'background-color: #121212;' : 'background-color: #fff'"
       class="row justify-center q-py-xs">
       <q-pagination
         v-model="pagination.page"
         direction-links
         active-color="secondary"
-        color="dark"
+        color="secondary"
         outline
         active-design="unelevated"
         active-text-color="white"
@@ -309,15 +309,19 @@ function exportTable() {
     .concat(
       dataForExport.value.map(row =>
         columnsToExport
-          .map(col =>
-            wrapCsvValue(
+          .map(col => {
+            let value =
               typeof col.field === 'function'
                 ? col.field(row)
-                : row[col.field === void 0 ? col.name : col.field],
-              col.format,
-              row
-            )
-          )
+                : row[col.field === void 0 ? col.name : col.field]
+
+            // Check if the field is 'coupon_rights' and convert it to 'Yes' or 'No'
+            if (col.name === 'coupon_rights') {
+              value = value === true || value === 'true' ? i18n.t('yes') : i18n.t('no')
+            }
+
+            return wrapCsvValue(value, col.format, row)
+          })
           .join(',')
       )
     )
