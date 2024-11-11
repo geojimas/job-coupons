@@ -94,9 +94,8 @@
             <q-btn
               size="md"
               dense
-              color="primary"
               rounded
-              :color="props.expand ? 'negative' : 'teal'"
+              :color="props.expand ? 'negative' : 'primary'"
               @click="props.expand = !props.expand"
               :icon="props.expand ? 'close' : 'arrow_downward'" />
           </q-td>
