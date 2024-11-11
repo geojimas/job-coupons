@@ -6,7 +6,7 @@
       :false-value="false"
       checked-icon="dark_mode"
       size="4em"
-      color="secondary"
+      color="primary"
       unchecked-icon="light_mode" />
   </div>
 </template>

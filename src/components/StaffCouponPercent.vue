@@ -105,7 +105,7 @@ const series = computed(() => {
 .card-animation {
   cursor: pointer;
   &:hover {
-    box-shadow: 0 26px 58px 0 rgba(0, 0, 0, 0.22), 0 5px 14px 0 $secondary;
+    box-shadow: 0 26px 58px 0 rgba(0, 0, 0, 0.22), 0 5px 14px 0 $primary;
     transition: box-shadow 0.3s;
   }
 }

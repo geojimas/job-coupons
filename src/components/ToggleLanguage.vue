@@ -3,7 +3,7 @@
     <q-btn-toggle
       v-model="changeLanguage"
       rounded
-      toggle-color="secondary"
+      toggle-color="primary"
       color="dark"
       text-color="white"
       :options="languages" />

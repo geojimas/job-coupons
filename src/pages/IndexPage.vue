@@ -90,7 +90,7 @@ const cookieConsent = () => {
   if (!store.getCookieIfExists) {
     $q.notify({
       message: i18n.t('cookieMsg'),
-      color: 'secondary',
+      color: 'primary',
       timeout: 0,
       textColor: 'white',
       position: 'bottom-right',

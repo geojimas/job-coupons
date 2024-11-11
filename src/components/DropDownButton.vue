@@ -1,6 +1,6 @@
 <template>
   <div :class="dynamicClass">
-    <q-btn-dropdown glossy push color="secondary" icon="manage_accounts">
+    <q-btn-dropdown glossy push color="primary" icon="manage_accounts">
       <div class="row no-wrap q-pa-sm">
         <!-- <div class="column">
           <div class="text-h6 q-mb-md">Connected as: </div>

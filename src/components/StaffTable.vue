@@ -19,13 +19,13 @@
       class="staff_table"
       table-class="q-mx-sm animate__animated animate__fadeIn">
       <template v-slot:loading>
-        <q-inner-loading showing color="secondary" />
+        <q-inner-loading showing color="primary" />
       </template>
       <template v-slot:header-cell-name="props">
         <q-th :props="props">
           <q-icon
             class="q-mr-sm"
-            color="secondary"
+            color="primary"
             name="settings_accessibility"
             :size="iconSize" />
           {{ props.col.label }}
@@ -33,37 +33,37 @@
       </template>
       <template v-slot:header-cell-surname="props">
         <q-th :props="props">
-          <q-icon class="q-mr-sm" color="secondary" name="badge" :size="iconSize" />
+          <q-icon class="q-mr-sm" color="primary" name="badge" :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
       <template v-slot:header-cell-email="props">
         <q-th :props="props">
-          <q-icon class="q-mr-sm" color="secondary" name="alternate_email" :size="iconSize" />
+          <q-icon class="q-mr-sm" color="primary" name="alternate_email" :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
       <template v-slot:header-cell-phone="props">
         <q-th :props="props">
-          <q-icon class="q-mr-sm" color="secondary" name="call" :size="iconSize" />
+          <q-icon class="q-mr-sm" color="primary" name="call" :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
       <template v-slot:header-cell-contract_term="props">
         <q-th :props="props">
-          <q-icon class="q-mr-sm" color="secondary" name="event" :size="iconSize" />
+          <q-icon class="q-mr-sm" color="primary" name="event" :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
       <template v-slot:header-cell-coupon_rights="props">
         <q-th :props="props">
-          <q-icon class="q-mr-sm" color="secondary" name="card_membership" :size="iconSize" />
+          <q-icon class="q-mr-sm" color="primary" name="card_membership" :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
       <template v-slot:header-cell-total_coupons="props">
         <q-th :props="props">
-          <q-icon class="q-mr-sm" color="secondary" name="all_out" :size="iconSize" />
+          <q-icon class="q-mr-sm" color="primary" name="all_out" :size="iconSize" />
           {{ props.col.label }}
         </q-th>
       </template>
@@ -72,7 +72,7 @@
         <q-input
           :class="$q.screen.lt.md ? 'q-ma-md text-bold' : 'q-mr-lg text-bold'"
           dense
-          color="secondary"
+          color="primary"
           debounce="300"
           v-model="filter"
           :placeholder="`${$t('Search')}`">
@@ -81,7 +81,7 @@
           </template>
         </q-input>
         <q-btn
-          color="secondary"
+          color="primary"
           icon-right="archive"
           class="q-mr-lg text-bold"
           :label="`${$t('exportToCSV')}`"
@@ -94,6 +94,7 @@
             <q-btn
               size="md"
               dense
+              color="primary"
               rounded
               :color="props.expand ? 'negative' : 'teal'"
               @click="props.expand = !props.expand"
@@ -113,7 +114,7 @@
               outline
               :style="columnFontStyle"
               text-color="white"
-              :color="col.value != '0' ? 'positive' : 'negative'"
+              :color="col.value !== '0' ? 'positive' : 'negative'"
               :label="col.value" />
             <div v-else>
               {{ col.value }}
@@ -121,7 +122,7 @@
           </q-td>
           <div class="flex justify-center no-wrap">
             <q-btn
-              color="primary"
+              color="dark"
               rounded
               class="q-mr-sm"
               debounce="300"
@@ -159,8 +160,8 @@
       <q-pagination
         v-model="pagination.page"
         direction-links
-        active-color="secondary"
-        color="secondary"
+        active-color="primary"
+        color="primary"
         outline
         active-design="unelevated"
         active-text-color="white"
@@ -249,7 +250,7 @@ const handleDeleteRequest = data => {
     ok: {
       push: true,
       label: i18n.t('yes'),
-      color: 'secondary'
+      color: 'primary'
     },
     cancel: {
       push: true,

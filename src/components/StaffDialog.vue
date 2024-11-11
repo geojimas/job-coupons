@@ -4,20 +4,23 @@
       :label="`${$t('add')}`"
       @click="openModal()"
       class="q-mr-lg text-bold"
-      color="secondary"
+      color="primary"
       icon="person_add"
       no-caps
       push />
     <q-dialog persistent v-model="toggleModal">
       <q-card>
         <q-card-section style="max-height: 60vh">
-          <q-chip
-            class="q-mb-sm"
-            color="dark"
-            :label="$t(`${toggleModalMode}`)"
-            text-color="white"
-            :icon="chipIcon">
-          </q-chip>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <q-chip
+              class="q-mb-sm"
+              color="dark"
+              :label="$t(`${toggleModalMode}`)"
+              text-color="white"
+              :icon="chipIcon">
+            </q-chip>
+            <q-btn color="negative" icon="close" :size="isMobileScreen ? 'sm' : 'lg'" dense flat v-close-popup />
+          </div>
           <q-form id="employeeForm" autofocus @submit="HandleSubmissions">
             <div class="row">
               <div class="col q-ma-sm">
@@ -28,7 +31,7 @@
                   autocomplete="off"
                   name="name"
                   :style="inputStyle"
-                  color="secondary"
+                  color="primary"
                   :rules="[
                     val => (val && val.length > 0) || `${$t('nameValidation1')}`,
                     val => (val && val.length >= 3) || `${$t('nameValidation2')}`
@@ -45,7 +48,7 @@
                   maxlength="30"
                   name="surname"
                   :style="inputStyle"
-                  color="secondary"
+                  color="primary"
                   :rules="[
                     val => (val && val.length > 0) || `${$t('surnameValidation1')}`,
                     val => (val && val.length >= 3) || `${$t('surnameValidation2')}`
@@ -64,7 +67,7 @@
                   maxlength="45"
                   autocomplete="off"
                   :style="inputStyle"
-                  color="secondary"
+                  color="primary"
                   type="email"
                   :rules="[(val, rules) => rules.email(val) || `${$t('validEmail')}`]"
                   v-model="formData.email"
@@ -78,7 +81,7 @@
                   autocomplete="off"
                   maxlength="10"
                   :style="inputStyle"
-                  color="secondary"
+                  color="primary"
                   type="tel"
                   :rules="[val => !val || /^\d+$/.test(val) || $t('validPhone2')]"
                   v-model="formData.phone"
@@ -94,14 +97,14 @@
                   autocomplete="off"
                   :style="inputStyle"
                   name="contactTerm"
-                  color="secondary"
+                  color="prmary"
                   v-model="formData.contract_term">
                   <template v-slot:append>
                     <q-icon name="event" class="cursor-pointer">
                       <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                        <q-date minimal color="secondary" v-model="formData.contract_term">
+                        <q-date minimal color="primary" v-model="formData.contract_term">
                           <div class="row items-center justify-end">
-                            <q-btn v-close-popup label="Close" color="secondary" flat />
+                            <q-btn v-close-popup label="Close" color="primary" flat />
                           </div>
                         </q-date>
                       </q-popup-proxy>
@@ -118,7 +121,7 @@
                   left-label
                   :label="`${$t('couponsRights')}`"
                   checked-icon="check"
-                  color="secondary"
+                  color="primary"
                   unchecked-icon="clear" />
               </div>
             </div>
@@ -129,7 +132,7 @@
                   autocomplete="off"
                   :name="`'${value}'`"
                   :style="monthsInputClass"
-                  color="secondary"
+                  color="primary"
                   maxlength="2"
                   type="tel"
                   :rules="[val => !val || /^-?\d+$/.test(val) || $t('validInteger2')]"
@@ -139,13 +142,12 @@
               </div>
             </div>
             <div class="q-pa-sm flex justify-end">
-              <q-btn class="q-mr-sm" flat :label="`${$t('cancel')}`" no-caps v-close-popup />
               <q-btn
                 type="submit"
-                color="secondary"
+                color="primary"
                 push
                 no-caps
-                :disable="toggleModalMode === Constants.editMode && !isDataChanged"
+                :disable="!isDataChanged"
                 :label="`${$t('save')}`" />
             </div>
           </q-form>
@@ -184,6 +186,10 @@ const monthsInputClass = computed(() => {
 })
 const clearableInput = computed(() => {
   return $q.screen.gt.sm
+})
+
+const isMobileScreen = computed(() => {
+  return $q.screen.lt.md
 })
 const inputStyle = ref('max-width: 220px')
 const numOfCoupons = ref(['', '', '', '', '', '', '', '', '', '', '', ''])
@@ -276,7 +282,7 @@ const isDataChanged = computed(() => {
     'december'
   ]
 
-  // Use the some method to check if any main field has changed
+  // Use some method to check if any main field has changed
   const mainFieldsChanged = mainFieldsToCompare.some(
     field => formData.value[field] !== currentItemRowData.value[field]
   )
