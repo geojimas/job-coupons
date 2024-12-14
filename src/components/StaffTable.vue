@@ -1,5 +1,5 @@
 <template>
-  <div :class="$q.screen.lt.lg ? 'q-ma-sm' : 'q-ma-xl'">
+  <div class="animate__animated animate__fadeIn" :class="$q.screen.lt.lg ? 'q-ma-sm' : 'q-ma-xl'">
     <q-table
       :title="`${$t('staffTable')}`"
       title-class="text-h5 text-bold"
@@ -67,6 +67,15 @@
           {{ props.col.label }}
         </q-th>
       </template>
+      <template v-slot:top-left="props">
+        <q-btn
+          color="primary"
+          icon-right="archive"
+          class="q-mr-lg text-bold"
+          :label="`${$t('exportToCSV')}`"
+          no-caps
+          @click="exportTable" />
+      </template>
       <template v-slot:top-right="props">
         <StaffDialog ref="staffDialogRef" @dataFromServer="getDataFromServerParent" />
         <q-input
@@ -80,13 +89,6 @@
             <q-icon name="search" />
           </template>
         </q-input>
-        <q-btn
-          color="primary"
-          icon-right="archive"
-          class="q-mr-lg text-bold"
-          :label="`${$t('exportToCSV')}`"
-          no-caps
-          @click="exportTable" />
       </template>
       <template v-slot:body="props">
         <q-tr :props="props">
@@ -225,6 +227,7 @@ const pagination = ref({
 const pagesNumber = computed(() =>
   Math.ceil(props.dataFromServer.length / pagination.value.rowsPerPage)
 )
+
 
 const iconSize = computed(() => {
   return $q.screen.lt.xl ? '1.1em' : '1.3em'
